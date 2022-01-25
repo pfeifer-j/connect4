@@ -1,5 +1,38 @@
 package connect4.model;
 
-public class Player {
+/**
+ * Enum for representing the {@code Player} and a players {@code symbol} in the
+ * {@code Board}.
+ */
+public enum Player {
 
+  /**
+   * Used for representing an empty field in the {@code Board}.
+   */
+  EMPTY("."),
+
+  /**
+   * Used for representing the field of the human player in the {@code Board}.
+   */
+  HUMAN("X"),
+
+  /**
+   * Used for representing the field of the bot in the {@code Board}.
+   */
+  MACHINE("O");
+
+  private final String symbol;
+
+  Player(String player) {
+    this.symbol = player;
+  }
+
+  /**
+   * Getter for the symbol of a {@code Player}.
+   *
+   * @return The symbol of a {@code Player}.
+   */
+  public String getSymbol() {
+    return symbol;
+  }
 }
