@@ -218,12 +218,7 @@ public class Connect4 implements Board {
    */
   @Override
   public Player getSlot(int row, int col) {
-    String value = board[row][col].name();
-
-    if (value.equals(Player.EMPTY.name())) {
-      return null;
-    }
-    return Player.valueOf(value);
+    return board[row][col];
   }
 
   /**

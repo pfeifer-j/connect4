@@ -2,8 +2,10 @@ package connect4.view;
 
 import connect4.model.Board;
 import connect4.model.Connect4;
+import connect4.model.DataObserver;
 import connect4.model.IllegalMoveException;
 import connect4.model.Player;
+import connect4.view.observerPattern.Observer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,14 +29,14 @@ public class C4Panel extends JPanel {
   private static final int INTERFACE_SIZE = 50;
   private static final Dimension INTERFACE_PANEL_SIZE =
       new Dimension(INTERFACE_SIZE, INTERFACE_SIZE);
-  private JFrame c4Frame;
   private static final Dimension centerPanelSize = new Dimension(500, 500);
   private static CenterPanel centerPanel;
   private static C4Controller controller;
+  private static DataObserver dataObserver = new DataObserver();
+  private JFrame c4Frame;
 
   public C4Panel(JFrame c4Frame) {
     this.c4Frame = c4Frame;
-    controller = new C4Controller();
 
     setPreferredSize(c4Frame.getSize());
     setLayout(new GridBagLayout());
@@ -53,22 +55,22 @@ public class C4Panel extends JPanel {
 
   private void guiLevel(Integer level) {
     // killMachineMove();
-    controller.handleLevel(level);
+    C4Controller.handleLevel(level);
   }
 
   private void guiNewGame() {
     // killMachineMove();
-    controller.handleNew();
+    C4Controller.handleNew();
     centerPanel = new CenterPanel();
   }
 
   private void guiSwitch() {
-    controller.handleSwitch();
+    C4Controller.handleSwitch();
     centerPanel = new CenterPanel();
   }
 
   private void guiUndo() {
-    controller.handleUndo();
+    C4Controller.handleUndo();
   }
 
   private void guiQuit() {
@@ -79,46 +81,64 @@ public class C4Panel extends JPanel {
 
   private static class C4Controller {
 
-    private static Board connect4;
-    private static Player firstPlayer;
-    private static Player currentPlayer;
-    private static int level;
-    private static Stack<Board> gameStack;
+    private static final Stack<Board> gameStack = new Stack<>();
+    private static Board connect4 = new Connect4();
+    private static Player firstPlayer = Player.HUMAN;
+    private static Player currentPlayer = Player.HUMAN;
+    private static int level = Board.CONNECT;
 
-    public C4Controller() {
-      connect4 = new Connect4();
-      firstPlayer = Player.HUMAN;
-      currentPlayer = firstPlayer;
-      gameStack = new Stack<>();
-      level = Board.CONNECT;
+    private C4Controller() {
+
     }
 
     private static void handleNew() {
       Player firstPlayer = connect4.getFirstPlayer();
       connect4 = new Connect4(firstPlayer);
-      currentPlayer = connect4.getFirstPlayer();
+      currentPlayer = firstPlayer;
       connect4.setLevel(level);
+      if (firstPlayer == Player.MACHINE) {
+        machineMove();
+      }
+      dataObserver.setBoard(connect4.clone());
     }
 
     private static void handleLevel(int newLevel) {
       level = newLevel;
       connect4.setLevel(level);
+      dataObserver.setBoard(connect4.clone());
     }
 
     private static void handleMove(int column) {
-      if (currentPlayer == Player.HUMAN) {
+      if (connect4.isGameOver()) {
+        //ToDo
+        System.out.println(connect4.getWinner());
+      } else {
+        humanMove(column);
+        machineMove();
+        dataObserver.setBoard(connect4.clone());
+      }
+    }
+
+    private static void humanMove(int column) {
+      if (currentPlayer == Player.HUMAN && !connect4.isGameOver()) {
         try {
-          gameStack.push(connect4);
+          gameStack.push(connect4.clone());
           connect4 = connect4.move(column);
+          dataObserver.setBoard(connect4.clone());
           currentPlayer = Player.MACHINE;
         } catch (IllegalMoveException e) {
-          // ToDo
+          System.out.println("Illegal move");
         }
-      } else if (currentPlayer == Player.MACHINE) {
+      }
+    }
+
+    private static void machineMove() {
+      if (currentPlayer == Player.MACHINE && !connect4.isGameOver()) {
         try {
           connect4 = connect4.machineMove();
+          dataObserver.setBoard(connect4);
           currentPlayer = Player.HUMAN;
-          System.out.println(connect4.toString());
+          System.out.println(dataObserver.getBoard().toString() + "\n" + currentPlayer);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
@@ -136,14 +156,18 @@ public class C4Panel extends JPanel {
       connect4 = new Connect4(newFirstPlayer);
       connect4.setLevel(level);
       currentPlayer = newFirstPlayer;
+      if (currentPlayer == Player.MACHINE) {
+        machineMove();
+      }
+      dataObserver.setBoard(connect4.clone());
     }
 
     private static void handleUndo() {
       if (!gameStack.isEmpty()) {
         connect4 = gameStack.pop();
-        currentPlayer = Player.HUMAN;
+        dataObserver.setBoard(connect4.clone());
       }
-      System.out.println(connect4.toString());
+      System.out.println(connect4.toString() + "\n" + currentPlayer);
     }
   }
 
@@ -170,9 +194,13 @@ public class C4Panel extends JPanel {
 
   private final class CenterPanel extends JPanel {
 
+    private GridBagLayout gridBagLayout;
+    private GridBagConstraints constraints;
+
     private CenterPanel() {
-      setLayout(new GridBagLayout());
-      GridBagConstraints constraints = new GridBagConstraints();
+      gridBagLayout = new GridBagLayout();
+      setLayout(gridBagLayout);
+      constraints = new GridBagConstraints();
       constraints.fill = GridBagConstraints.HORIZONTAL;
       setBackground(Color.WHITE);
 
@@ -188,20 +216,26 @@ public class C4Panel extends JPanel {
             add(new RowPanel(Board.ROWS - i), constraints);
           } else if (i == Board.ROWS) {
             add(new ColPanel(j), constraints);
-          } else {
-            add(new SlotPanel(j), constraints);
+          } else{
+            add(new SlotPanel(i, j, Player.EMPTY), constraints);
           }
         }
       }
     }
   }
 
-  private final class SlotPanel extends JPanel {
+  private final class SlotPanel extends JPanel implements Observer {
 
+    private final int row;
     private final int column;
+    private Player player;
 
-    private SlotPanel(int col) {
+    private SlotPanel(int row, int col, Player player) {
+      this.row = row;
       this.column = col;
+      this.player = player;
+
+      dataObserver.addObserver(this);
 
       setPreferredSize(INTERFACE_PANEL_SIZE);
       setBackground(Color.BLUE);
@@ -209,21 +243,25 @@ public class C4Panel extends JPanel {
           new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-              controller.handleMove(column);
-              repaint();
+              C4Controller.handleMove(column);
+              update();
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
           });
     }
 
@@ -232,15 +270,26 @@ public class C4Panel extends JPanel {
       super.paintComponent(graphics);
 
       setBackground(Color.BLUE);
-
       Dimension dimension = getSize();
-
       Graphics2D g = (Graphics2D) graphics;
-      g.setColor(Color.WHITE);
+
+      if (player.equals(Player.HUMAN)) {
+        g.setColor(Color.YELLOW);
+      } else if (player.equals(Player.MACHINE)) {
+        g.setColor(Color.RED);
+      } else {
+        g.setColor(Color.WHITE);
+      }
 
       setAlignmentX(JLabel.CENTER);
       setAlignmentY(JLabel.CENTER);
       g.fillOval(5, 5, dimension.width - 10, dimension.height - 10);
+    }
+
+    @Override
+    public void update() {
+      player = dataObserver.getBoard().getSlot(row,column-1);
+      repaint();
     }
   }
 
@@ -283,7 +332,8 @@ public class C4Panel extends JPanel {
 
       setLayout(new FlowLayout());
       JComboBox<Integer> levelButton = new C4ComboBox();
-      levelButton.addActionListener(event -> guiLevel((Integer) levelButton.getSelectedItem()));
+      levelButton.addActionListener(
+          event -> guiLevel((Integer) levelButton.getSelectedItem()));
       add(levelButton);
 
       JButton newGameButton = new C4Button("New", event -> guiNewGame());
