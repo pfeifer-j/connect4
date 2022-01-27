@@ -1,10 +1,9 @@
-package connect4.controller;
+package connect4.a2;
 
 import connect4.model.Board;
 import connect4.model.Connect4;
 import connect4.model.IllegalMoveException;
 import connect4.model.Player;
-import connect4.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,7 +12,7 @@ import java.io.InputStreamReader;
  * This utility-class represents the controller in the MVC-model. The {@code
  * Shell} controls the program by interacting with the {@code Connect4}.
  */
-public final class Shell {
+public final class ShellController {
 
   private static Board connect4 = new Connect4();
   private static int level = Board.CONNECT;
@@ -25,7 +24,7 @@ public final class Shell {
    * asserted that the {@code Shell} isn't instantiated, the constructor throws
    * an AssertionError on use.
    */
-  private Shell() {
+  private ShellController() {
     throw new AssertionError("Suppress the use of this utility-class");
   }
 

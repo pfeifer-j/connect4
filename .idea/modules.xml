@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/abalone/abalone.iml" filepath="$PROJECT_DIR$/abalone/abalone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/connect4/connect4.iml" filepath="$PROJECT_DIR$/connect4/connect4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/connect4_gui.iml" filepath="$PROJECT_DIR$/.idea/connect4_gui.iml" />
+    </modules>
+  </component>
+</project>
