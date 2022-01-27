@@ -1,5 +1,6 @@
 package connect4.view;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 
 public class C4Frame extends JFrame {
@@ -7,6 +8,7 @@ public class C4Frame extends JFrame {
   C4Frame() {
     setTitle("Connect Four");
     setLocationRelativeTo(null);
+    setPreferredSize(new Dimension(500, 500));
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     add(new C4Panel(this));

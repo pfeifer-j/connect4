@@ -15,12 +15,12 @@ public class Connect4 implements Board {
   /**
    * The maximal level which can be selected for playing.
    */
-  private static final int MAX_LEVEL = 5;
+  public static final int MAX_LEVEL = 5;
 
   /**
    * The minimal level which can be selected for playing.
    */
-  private static final int MIN_LEVEL = 1;
+  public static final int MIN_LEVEL = 1;
 
   private Player[][] board;
   private int level;
