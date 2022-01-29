@@ -1,23 +1,45 @@
 package connect4.view;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
+/**
+ * Models the window of the connect4 game. This class uses the singleton pattern
+ * to ensure that only one game can run at a time.
+ */
 public class C4Frame extends JFrame {
 
-  C4Frame() {
-    setTitle("Connect Four");
+  /**
+   * The only instance of the {@code C4Frame}.
+   */
+  private static final C4Frame c4frame = new C4Frame();
+
+  /**
+   * The constructor is private to limit the usage.
+   */
+  private C4Frame() {
+
+    // Set the frame options.
+    setTitle("Connect4");
     setLocationRelativeTo(null);
-    setPreferredSize(new Dimension(500, 500));
+    setLayout(new BorderLayout());
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    add(new C4Panel(this));
-
     setVisible(true);
+
+    // Fill the frame with the gamePanel.
+    C4Panel gamePanel = new C4Panel();
+    add(gamePanel);
+
+    // Resize window to fit every component.
     pack();
   }
 
+  /**
+   * Returns the only instance.
+   *
+   * @return the {@code C4Frame}-instance.
+   */
   public static JFrame getFrame() {
-    return new C4Frame();
+    return c4frame;
   }
 }

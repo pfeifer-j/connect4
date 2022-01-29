@@ -3,13 +3,26 @@ package connect4;
 import connect4.view.C4Frame;
 import javax.swing.SwingUtilities;
 
-public class Main {
+/**
+ * Entrypoint of the program, which starts the game.
+ */
+public final class Main {
+
   /**
-   * Driver of the program. Reads and handles user-input.
+   * Prevents the initialisation of the utility-class {@code Main}. Since its
+   * asserted that the {@code Shell} isn't instantiated, the constructor throws
+   * an AssertionError on usage.
+   */
+  private Main() {
+    throw new AssertionError("Suppress the use of this utility-class");
+  }
+
+  /**
+   * Driver of the program.
    *
-   * @param args Not in use.
+   * @param args not in use.
    */
   public static void main(String[] args) {
-    SwingUtilities.invokeLater((C4Frame::getFrame));
+    SwingUtilities.invokeLater(C4Frame::getFrame);
   }
 }

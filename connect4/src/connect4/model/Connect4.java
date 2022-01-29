@@ -7,45 +7,34 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The class {@code Connect4} contains the logic for a regular game of
- * Connect4.
+ * Contains the logic for a regular game of Connect4.
  */
 public class Connect4 implements Board {
 
   /**
    * The maximal level which can be selected for playing.
    */
-  public static final int MAX_LEVEL = 5;
+  public static final int MAX_LEVEL = 15;
 
   /**
-   * The minimal level which can be selected for playing.
+   * The amount of stones a player has to row up to win.
    */
-  public static final int MIN_LEVEL = 1;
+  public static final int WINNING_ROW_LENGTH = 4;
 
   private Player[][] board;
   private int level;
   private Player firstPlayer;
   private Player lastStonePlaced;
   private int[][] groupCounterArray;
-  private final Collection<Coordinates2D> witnessPlayer;
-  private final Collection<Coordinates2D> witnessComputer;
+  private Collection<Coordinates2D> witnessPlayer;
+  private Collection<Coordinates2D> witnessComputer;
 
   /**
    * Constructs a new {@code Connect4}-instance using the default settings.
    */
   public Connect4() {
     this.firstPlayer = Player.HUMAN;
-    this.level = Board.CONNECT;
-    this.lastStonePlaced = Player.EMPTY;
-    this.board = new Player[Board.ROWS][Board.COLS];
-
-    for (Player[] row : board) {
-      Arrays.fill(row, Player.EMPTY);
-    }
-
-    groupCounterArray = new int[2][3];
-    witnessPlayer = new LinkedList<>();
-    witnessComputer = new LinkedList<>();
+    constructConnect4();
   }
 
   /**
@@ -56,6 +45,28 @@ public class Connect4 implements Board {
    */
   public Connect4(Player firstPlayer) {
     this.firstPlayer = firstPlayer;
+    constructConnect4();
+  }
+
+  /**
+   * Sorts the collection by converting it to a linked list. Used to sort the
+   * witnesses in lexicographical order and copies it to a linked list.
+   *
+   * @param collection Will be sorted.
+   * @return The sorted collection.
+   */
+  private static Collection<Coordinates2D> sortCollection(
+      Collection<Coordinates2D> collection) {
+    List<Coordinates2D> list = new LinkedList<>(collection);
+    Collections.sort(list);
+    return list;
+  }
+
+  /**
+   * Constructs a game of connect4. This method is only called by the
+   * constructors to reduce redundancy.
+   */
+  private void constructConnect4() {
     this.level = Board.CONNECT;
     this.lastStonePlaced = Player.EMPTY;
     this.board = new Player[Board.ROWS][Board.COLS];
@@ -79,7 +90,7 @@ public class Connect4 implements Board {
 
     for (int i = 0; i < Board.ROWS; i++) {
       for (int j = 0; j < Board.COLS; j++) {
-        boardToString.append(board[i][j].getSymbol());
+        boardToString.append(board[i][j].toString());
 
         if (j < Board.COLS - 1) {
           boardToString.append(" ");
@@ -98,12 +109,9 @@ public class Connect4 implements Board {
    */
   @Override
   public boolean isGameOver() {
-    if (boardIsFull()) {
-      return true;
-    }
-
     calculateAllGroups();
-    return groupCounterArray[0][2] >= 1 || groupCounterArray[1][2] >= 1;
+    return groupCounterArray[0][2] >= 1 || groupCounterArray[1][2] >= 1
+        || boardIsFull();
   }
 
   /**
@@ -124,38 +132,46 @@ public class Connect4 implements Board {
   @Override
   public Board move(int col) throws IllegalMoveException {
 
-    if (col < 1 || col > 7) {
-      throw new IllegalArgumentException();
+    if (col < 0 || col > Board.COLS - 1) {
+      throw new IllegalArgumentException("The given column is not between 1 "
+          + "and 7.");
     }
-    col = col - 1;
 
     if (lastStonePlaced.equals(Player.HUMAN) || isGameOver()) {
-      throw new IllegalMoveException("");
+      throw new IllegalMoveException("This move is not allowed. Either the "
+          + "game is over or its the turn of the machine.");
     }
 
-    Connect4 clonedBoard = (Connect4) this.clone();
-    boolean stoneCouldBeSet = clonedBoard.dropStone(col, Player.HUMAN);
+    Connect4 clonedBoard = this.clone();
 
-    if (!stoneCouldBeSet) {
-      throw new IllegalMoveException("");
+    if (clonedBoard.isColFull(col)) {
+
+      // The board is full and therefore null is returned.
+      return null;
+    } else {
+      boolean stoneCouldBeSet = clonedBoard.dropStone(col, Player.HUMAN);
+      if (!stoneCouldBeSet) {
+        throw new IllegalMoveException("The stone couldn't be put in this "
+            + "column.");
+      }
+
+      lastStonePlaced = Player.HUMAN;
+      return clonedBoard;
     }
-
-    lastStonePlaced = Player.HUMAN;
-    return clonedBoard;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public Board machineMove() throws IllegalMoveException {
+  public Board machineMove() throws IllegalMoveException, InterruptedException {
 
-    int index = getBestIndex();
-
-    if (lastStonePlaced.equals(Player.MACHINE) || isColFull(index)) {
+    if (lastStonePlaced.equals(Player.MACHINE)) {
       throw new IllegalMoveException("");
     } else {
-      Connect4 clonedBoard = (Connect4) this.clone();
+      int index = getBestIndex();
+      assert !isColFull(index);
+      Connect4 clonedBoard = this.clone();
       clonedBoard.dropStone(index, Player.MACHINE);
       lastStonePlaced = Player.MACHINE;
       return clonedBoard;
@@ -167,14 +183,9 @@ public class Connect4 implements Board {
    */
   @Override
   public void setLevel(int newLevel) {
-
-    if (newLevel >= 5) {
-      this.level = MAX_LEVEL;
-    } else if (newLevel <= 1) {
-      this.level = MIN_LEVEL;
-    } else {
-      this.level = newLevel;
-    }
+    // The highest level that will be set is saved in MAX_LEVEL.
+    // In the GUI the player can only select levels up to MAX_LEVEL.
+    this.level = newLevel;
   }
 
   /**
@@ -183,6 +194,7 @@ public class Connect4 implements Board {
   @Override
   public Player getWinner() {
     Player winner = null;
+
     getWitness();
 
     if (isGameOver()) {
@@ -202,15 +214,17 @@ public class Connect4 implements Board {
   public Collection<Coordinates2D> getWitness() {
     if (isGameOver()) {
 
-      if (witnessPlayer.size() >= 4) {
+      if (witnessPlayer.size() >= WINNING_ROW_LENGTH) {
         return sortCollection(witnessPlayer);
-      }
-
-      if (witnessComputer.size() >= 4) {
+      } else if (witnessComputer.size() >= WINNING_ROW_LENGTH) {
         return sortCollection(witnessComputer);
       }
+    } else {
+      throw new IllegalStateException("There is no witness yet.");
     }
-    return null;
+
+    // Return an empty collection if the game is over but there is no winner.
+    return new LinkedList<Coordinates2D>();
   }
 
   /**
@@ -218,6 +232,7 @@ public class Connect4 implements Board {
    */
   @Override
   public Player getSlot(int row, int col) {
+    assert board[row][col] != null;
     return board[row][col];
   }
 
@@ -225,55 +240,20 @@ public class Connect4 implements Board {
    * {@inheritDoc}
    */
   @Override
-  public Board clone() {
+  public Connect4 clone() {
     Connect4 clonedConnect = new Connect4();
 
     Player[][] clonedBoard = new Player[Board.ROWS][Board.COLS];
 
     for (int i = 0; i < Board.ROWS; i++) {
-      for (int j = 0; j < Board.COLS; j++) {
-        clonedBoard[i][j] = Player.valueOf(board[i][j].toString());
-      }
+      clonedBoard[i] = board[i].clone();
     }
-
-    clonedConnect.setBoard(clonedBoard);
-    clonedConnect.setFirstPlayer(firstPlayer);
-    clonedConnect.setLastStonePlaced(lastStonePlaced);
     clonedConnect.setLevel(level);
+    clonedConnect.setFirstPlayer(firstPlayer);
+    clonedConnect.board = clonedBoard;
+    clonedConnect.lastStonePlaced = lastStonePlaced;
 
     return clonedConnect;
-  }
-
-  /**
-   * Sorts the collection by converting it to a linked list. Used to sort the
-   * witnesses in lexicographical order.
-   *
-   * @param collection Will be sorted.
-   * @return The sorted collection.
-   */
-  private static Collection<Coordinates2D> sortCollection(
-      Collection<Coordinates2D> collection) {
-    List<Coordinates2D> list = new LinkedList<>(collection);
-    Collections.sort(list);
-    return list;
-  }
-
-  /**
-   * Sets the board.
-   *
-   * @param board To be set.
-   */
-  private void setBoard(Player[][] board) {
-    this.board = board;
-  }
-
-  /**
-   * Sets the last Stone which was placed.
-   *
-   * @param lastStonePlaced Which was placed.
-   */
-  private void setLastStonePlaced(Player lastStonePlaced) {
-    this.lastStonePlaced = lastStonePlaced;
   }
 
   /**
@@ -345,10 +325,17 @@ public class Connect4 implements Board {
       }
       groupCounter = 0;
 
-      if (witnessPlayer.size() < 4 && witnessComputer.size() < 4) {
-        witnessPlayer.clear();
-        witnessComputer.clear();
-      }
+      clearWitnesses();
+    }
+  }
+
+  /**
+   * Resets the witnesses.
+   */
+  private void clearWitnesses() {
+    if (witnessPlayer.size() < 4 && witnessComputer.size() < 4) {
+      witnessPlayer.clear();
+      witnessComputer.clear();
     }
   }
 
@@ -375,11 +362,7 @@ public class Connect4 implements Board {
         updateWitnesses(i, j);
       }
       groupCounter = 0;
-
-      if (witnessPlayer.size() < 4 && witnessComputer.size() < 4) {
-        witnessPlayer.clear();
-        witnessComputer.clear();
-      }
+      clearWitnesses();
     }
   }
 
@@ -431,10 +414,7 @@ public class Connect4 implements Board {
       current = null;
       groupCounter = 0;
 
-      if (witnessPlayer.size() < 4 && witnessComputer.size() < 4) {
-        witnessPlayer.clear();
-        witnessComputer.clear();
-      }
+      clearWitnesses();
       rowCounter = savedRowCounter;
     }
   }
@@ -481,6 +461,7 @@ public class Connect4 implements Board {
         updateWitnesses(rowCounter, colCounter);
         colCounter++;
       }
+      clearWitnesses();
       current = null;
     }
   }
@@ -630,38 +611,45 @@ public class Connect4 implements Board {
    *
    * @return the ideal column.
    */
-  private int getBestIndex() {
+  private int getBestIndex() throws InterruptedException {
+    int currentLevel = level;
     Connect4 tree = (Connect4) clone();
-    return tree.getHighestEval(level)[1];
+    return tree.getHighestEval(currentLevel)[1];
   }
 
   /**
    * Calculates the column in which a stone can be thrown to achieve the best
    * possible {@code board} for the {@code Player.MACHINE}.
+   * <p>
+   * This method shares redundant parts with getLowestEval are kept separate for
+   * better readability and understanding.
    *
    * @param height Represents the level or the depth of the recursion used.
    * @return The calculated score of a {@code board} and the column in which the
    * stone has to be thrown to achieve this calculated value.
    */
-  private int[] getHighestEval(int height) {
+  private int[] getHighestEval(int height) throws InterruptedException {
+    if (Thread.currentThread().isInterrupted()) {
+      throw new InterruptedException("The thread was interrupted.");
+    }
+
     int[] result = new int[2];
     result[0] = Integer.MIN_VALUE;
 
     for (int i = 0; i < Board.COLS; i++) {
-      if (isColFull(i)) {
-        continue;
-      }
-      Connect4 child = (Connect4) clone();
-      child.dropStone(i, Player.MACHINE);
-      int maxScore = child.evaluate(height);
+      if (!isColFull(i)) {
+        Connect4 child = clone();
+        child.dropStone(i, Player.MACHINE);
+        int maxScore = child.evaluate(height);
 
-      if (height > 1) {
-        maxScore = maxScore + child.getLowestEval(height - 1)[0];
-      }
+        if (height > 1) {
+          maxScore = maxScore + child.getLowestEval(height - 1)[0];
+        }
 
-      if (maxScore > result[0]) {
-        result[0] = maxScore;
-        result[1] = i;
+        if (maxScore > result[0]) {
+          result[0] = maxScore;
+          result[1] = i;
+        }
       }
     }
     return result;
@@ -669,31 +657,37 @@ public class Connect4 implements Board {
 
   /**
    * Calculates the column in which a stone can be thrown to achieve the worst
-   * possible {@code board} for the {@code Player.HUMAN}.
+   * possible {@code board} for the {@code Player.MACHINE}.
+   * <p>
+   * This method shares redundant parts with getHighestEval are kept separate
+   * for better readability and understanding.
    *
    * @param height Represents the level or the depth of the recursion used.
    * @return The calculated score of a {@code board} and the column in which the
    * stone has to be thrown to achieve this calculated value.
    */
-  private int[] getLowestEval(int height) {
+  private int[] getLowestEval(int height) throws InterruptedException {
+    if (Thread.currentThread().isInterrupted()) {
+      throw new InterruptedException("The thread was interrupted.");
+    }
+
     int[] result = new int[2];
     result[0] = Integer.MAX_VALUE;
 
     for (int i = 0; i < Board.COLS; i++) {
-      if (isColFull(i)) {
-        continue;
-      }
+      if (!isColFull(i)) {
 
-      Connect4 child = (Connect4) clone();
-      child.dropStone(i, Player.HUMAN);
-      int minScore = child.evaluate(height);
+        Connect4 child = clone();
+        child.dropStone(i, Player.HUMAN);
+        int minScore = child.evaluate(height);
 
-      if (height > 1) {
-        minScore = minScore + child.getHighestEval(height - 1)[0];
-      }
+        if (height > 1) {
+          minScore = minScore + child.getHighestEval(height - 1)[0];
+        }
 
-      if (minScore < result[0]) {
-        result[0] = minScore;
+        if (minScore < result[0]) {
+          result[0] = minScore;
+        }
       }
     }
     return result;

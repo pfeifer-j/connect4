@@ -1,5 +1,7 @@
 package connect4.model;
 
+import java.rmi.server.UID;
+
 /**
  * Custom exception used to indicate the use of an illegal move during the game
  * of {@code Connect4}. Occurs e.g. if a move is executed on a full column. The
@@ -11,7 +13,15 @@ public class IllegalMoveException extends RuntimeException {
 
   /**
    * Constructs a new exception using the super-constructor of {@code
-   * RuntimeException}.
+   * RuntimeException} without using a message.
+   */
+  public IllegalMoveException() {
+    super();
+  }
+
+  /**
+   * Constructs a new exception using the super-constructor of {@code
+   * RuntimeException} using a message.
    *
    * @param msg The message used to describe the occurred problem.
    */

@@ -35,4 +35,21 @@ public enum Player {
   public String getSymbol() {
     return symbol;
   }
+
+
+  /**
+   * Returns the opposite player.
+   * If {@code this} is {@code Player.Empty} return {@code Player.Empty}.
+   *
+   * @return the opposite player.
+   */
+  public Player opposite() {
+    if (this.equals(Player.MACHINE)) {
+      return Player.HUMAN;
+    } else if (this.equals(Player.HUMAN)) {
+      return Player.MACHINE;
+    } else {
+      return Player.EMPTY;
+    }
+  }
 }
