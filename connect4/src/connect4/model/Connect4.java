@@ -224,7 +224,7 @@ public class Connect4 implements Board {
     }
 
     // Return an empty collection if the game is over but there is no winner.
-    return new LinkedList<Coordinates2D>();
+    return new LinkedList<>();
   }
 
   /**
@@ -593,10 +593,10 @@ public class Connect4 implements Board {
     int[][] slotsPerCol = new int[2][7];
 
     for (int i = 0; i < board[0].length; i++) {
-      for (int j = 0; j < board.length; j++) {
-        if (board[j][i].equals(Player.HUMAN)) {
+      for (Player[] players : board) {
+        if (players[i].equals(Player.HUMAN)) {
           slotsPerCol[0][i]++;
-        } else if (board[j][i].equals(Player.MACHINE)) {
+        } else if (players[i].equals(Player.MACHINE)) {
           slotsPerCol[1][i]++;
         }
       }
@@ -613,7 +613,7 @@ public class Connect4 implements Board {
    */
   private int getBestIndex() throws InterruptedException {
     int currentLevel = level;
-    Connect4 tree = (Connect4) clone();
+    Connect4 tree = clone();
     return tree.getHighestEval(currentLevel)[1];
   }
 

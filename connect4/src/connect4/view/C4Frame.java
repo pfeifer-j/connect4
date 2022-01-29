@@ -1,6 +1,7 @@
 package connect4.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.JFrame;
 
 /**
@@ -24,14 +25,16 @@ public class C4Frame extends JFrame {
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLayout(new BorderLayout());
     setVisible(true);
 
     // Fill the frame with the gamePanel.
     C4Panel gamePanel = new C4Panel();
-    add(gamePanel);
+    add(gamePanel, BorderLayout.CENTER);
 
-    // Resize window to fit every component.
+    // Resize window to fit every component and save the resulting size.
     pack();
+    //setMinimumSize(new Dimension(getSize().width, getSize().height));
   }
 
   /**

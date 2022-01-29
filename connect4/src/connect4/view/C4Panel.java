@@ -32,10 +32,67 @@ import javax.swing.SwingConstants;
 public class C4Panel extends JPanel {
 
   /**
-   * Preferred size of the gameSlots.
+   * The background-color of a slot.
+   */
+  private static final Color HUMAN_COLOR = Color.YELLOW;
+  /**
+   * The background-color of a slot.
+   */
+  private static final Color MACHINE_COLOR = Color.RED;
+  /**
+   * The background-color of a slot.
+   */
+  private static final Color EMPTY_COLOR = Color.WHITE;
+  /**
+   * The background-color of a slot.
+   */
+  private static final Color HIGHLIGHTED_COLOR = Color.BLACK;
+  /**
+   * The height of a ColPanel. The height is by default just enough to fit the
+   * standard font of a JLabel.
+   */
+  private static final int COLUMN_HEIGHT = 15;
+  /**
+   * The width of a RowPanel. The width is by default just enough to fit the
+   * standard font of a JLabel.
+   */
+  private static final int ROW_WIDTH = 15;
+
+  /**
+   * The size of the right/east border.
+   */
+  private static final int BORDER_VISIBLE = 3;
+
+  /**
+   * The size of all borders except the right/east one.
+   */
+  private static final int BORDER_INVISIBLE = 0;
+
+  /**
+   * The default color of a border.
+   */
+  private static final Color BORDER_COLOR = Color.BLUE;
+  /**
+   * The background-color of a slot.
+   */
+  private static final Color SLOT_BACK_GROUND_COLOR = Color.BLUE;
+  /**
+   * Converter for transferring the information about the state of the {@code
+   * Board} since the controller and view have to be able to react to changes
+   * within the board. Saved statically since the utility-class C4Controller has
+   * to be able to access it.
+   */
+  private static final ObservableBoard observableBoard = new ObservableBoard(
+      new Connect4());
+  /**
+   * Used to present information about the current gameState. Saved statically
+   * since the utility-class C4Controller has to be able to access it.
+   */
+  private static final JLabel statusLabel = new JLabel("It's your turn!");
+  /**
+   * Preferred size of the gameSlots. Used for height and width.
    */
   private static final int SLOT_SIZE = 50;
-
   /**
    * Preferred dimension of the gameSlots.
    */
@@ -43,49 +100,23 @@ public class C4Panel extends JPanel {
       SLOT_SIZE);
 
   /**
-   * Converter for transferring the information about the state of the {@code
-   * Board} since the controller and view have to be able to react to changes
-   * within the board. Saved statically since the utility-class C4Controller has
-   * to be able to access it.
-   */
-  private final static ObservableBoard observableBoard = new ObservableBoard(
-      new Connect4());
-
-  /**
-   * Used to present information about the current gameState. Saved statically
-   * since the utility-class C4Controller has to be able to access it.
-   */
-  private static final JLabel statusLabel = new JLabel("It's your turn!");
-
-  /**
    * Constructs a new {@code C4Panel}.
    */
   public C4Panel() {
+    setLayout(new BorderLayout());
 
-    // GridBagLayout is used since its easier to handle different-sized
-    // panels compared to the GridLayout.
-    setLayout(new GridBagLayout());
-    GridBagConstraints constraints = new GridBagConstraints();
-
-    // Adding the topPanel which contains the JLabel to inform the user.
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.gridx = 0;
-    constraints.gridy = 0;
+    // Adding the topPanel which contains the JLabel to inform the user about
+    // the current state of the game.
     JPanel topPanel = new JPanel();
     topPanel.add(statusLabel);
-
-    add(topPanel, constraints);
+    add(topPanel, BorderLayout.NORTH);
 
     // Adding the centerPanel which contains the board.
-    constraints.gridx = 0;
-    constraints.gridy = 1;
     CenterPanel centerPanel = new CenterPanel();
-    add(centerPanel, constraints);
+    add(centerPanel, BorderLayout.CENTER);
 
     // Adding the buttonPanel which contains the buttons.
-    constraints.ipady = 0;
-    constraints.gridy = 2;
-    add(new ButtonPanel(), constraints);
+    add(new ButtonPanel(), BorderLayout.SOUTH);
   }
 
   /**
@@ -345,7 +376,7 @@ public class C4Panel extends JPanel {
 
         Board clonedBoard = observableBoard.getBoard().clone();
         if (clonedBoard.isGameOver()) {
-          C4Panel.statusLabel.setText("The game is already over!"
+          C4Panel.statusLabel.setText("The game is already over! "
               + getWinnerText());
         } else {
 
@@ -379,26 +410,6 @@ public class C4Panel extends JPanel {
    */
   private static final class SlotPanel extends JPanel implements Observer {
 
-    /**
-     * The background-color of a slot.
-     */
-    private final static Color SLOT_BACK_GROUND_COLOR = Color.BLUE;
-    /**
-     * The background-color of a slot.
-     */
-    private final static Color HUMAN_COLOR = Color.YELLOW;
-    /**
-     * The background-color of a slot.
-     */
-    private final static Color MACHINE_COLOR = Color.RED;
-    /**
-     * The background-color of a slot.
-     */
-    private final static Color EMPTY_COLOR = Color.WHITE;
-    /**
-     * The background-color of a slot.
-     */
-    private final static Color HIGHLIGHTED_COLOR = Color.GREEN;
     /**
      * Row of the slotPanel in the gridBagLayout.
      */
@@ -462,6 +473,9 @@ public class C4Panel extends JPanel {
             public void mouseExited(MouseEvent e) {
             }
           });
+
+      // Add componentListener
+      // ToDo
     }
 
     @Override
@@ -557,28 +571,6 @@ public class C4Panel extends JPanel {
   private static final class ColPanel extends JPanel {
 
     /**
-     * The height of a ColPanel. The height is by default just enough to fit the
-     * standard font of a JLabel.
-     */
-    private static final int COLUMN_HEIGHT = 15;
-
-    /**
-     * The size of the right/east border.
-     */
-    private static final int BORDER_VISIBLE = 3;
-
-    /**
-     * The size of all borders except the right/east one.
-     */
-    private static final int BORDER_INVISIBLE = 0;
-
-    /**
-     * The default color of a border.
-     */
-    private static final Color BORDER_COLOR = Color.BLUE;
-
-
-    /**
      * Constructs a panel which will be placed on the bottom edge of the board.
      *
      * @param col is the column in which this panel is placed and which is
@@ -595,12 +587,12 @@ public class C4Panel extends JPanel {
       }
 
       JLabel number = new JLabel(col.toString());
-
-      // Setting panelSize and alignment
-      setPreferredSize(new Dimension(SLOT_SIZE, COLUMN_HEIGHT));
       number.setHorizontalAlignment(SwingConstants.CENTER);
 
-      add(number, BorderLayout.CENTER);
+      // Setting panelSize
+      setPreferredSize(new Dimension(SLOT_SIZE, COLUMN_HEIGHT));
+
+      add(number, BorderLayout.NORTH);
     }
   }
 
@@ -613,31 +605,30 @@ public class C4Panel extends JPanel {
   private static final class RowPanel extends JPanel {
 
     /**
-     * The width of a RowPanel. The width is by default just enough to fit the
-     * standard font of a JLabel.
-     */
-    private static final int ROW_WIDTH = 15;
-
-
-    /**
      * Constructs a panel which will be placed on the left edge of the board.
      *
      * @param row which this panel is placed in and the number which is stored
      *            inside the JLabel.
      */
-    private RowPanel(int row) {
+    private RowPanel(Integer row) {
       setLayout(new BorderLayout());
 
       // Setting only one visible border to make the column on the board look
       // like a ruler.
       if (row < Board.ROWS) {
-        setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, Color.BLUE));
+        setBorder(BorderFactory.createMatteBorder(BORDER_VISIBLE,
+            BORDER_INVISIBLE, BORDER_INVISIBLE, BORDER_INVISIBLE,
+            BORDER_COLOR));
       }
-      setPreferredSize(new Dimension(10, SLOT_SIZE));
 
-      // Setting panelSize and alignment
+      // Adding one space character for slightly adjusting the positioning.
       JLabel number = new JLabel(row + " ");
-      add(number, BorderLayout.CENTER);
+      number.setHorizontalAlignment(SwingConstants.LEFT);
+
+      // Setting panelSize
+      setPreferredSize(new Dimension(ROW_WIDTH, SLOT_SIZE));
+
+      add(number, BorderLayout.EAST);
     }
   }
 
@@ -645,7 +636,7 @@ public class C4Panel extends JPanel {
    * Models the gameBoard and all its components like the slots which represent
    * a stone and the scale for row and column numbers.
    */
-  private final class CenterPanel extends JPanel {
+  private static final class CenterPanel extends JPanel {
 
     /**
      * Construct a new {@code CenterPanel}.
@@ -690,35 +681,48 @@ public class C4Panel extends JPanel {
     }
   }
 
-  private class ButtonPanel extends JPanel {
+  /**
+   * Models the panel in which all buttons are placed.
+   */
+  private static class ButtonPanel extends JPanel {
 
+    /**
+     * Construct a new {@code ButtonPanel}
+     */
     private ButtonPanel() {
-
       setLayout(new FlowLayout());
 
+      // Add levelButton.
       JComboBox<Integer> levelButton = new JComboBox<>();
       for (int i = 1; i <= Connect4.MAX_LEVEL; i++) {
         levelButton.addItem(i);
       }
       levelButton.setSelectedItem(Board.CONNECT);
       levelButton.addActionListener(event -> {
+
+        // getSelectedItem() requires a check to avoid a NullPointerException.
+        // Without the assertion IntelliJ shows a warning.
         assert levelButton.getSelectedItem() != null;
         C4Controller.handleLevel((Integer) levelButton.getSelectedItem());
       });
       add(levelButton);
 
+      // Add newGameButton.
       JButton newGameButton = new JButton("New");
       newGameButton.addActionListener(event -> C4Controller.handleNew(null));
       add(newGameButton);
 
+      // Add switchButton.
       JButton switchButton = new JButton("Switch");
       switchButton.addActionListener(event -> C4Controller.handleSwitch());
       add(switchButton);
 
+      // Add undoButton.
       JButton undoButton = new JButton("Undo");
       undoButton.addActionListener(event -> C4Controller.handleUndo());
       add(undoButton);
 
+      // Add quitButton.
       JButton quitButton = new JButton("Quit");
       quitButton.addActionListener(event -> C4Controller.handleQuit());
       add(quitButton);

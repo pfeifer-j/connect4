@@ -2,18 +2,37 @@ package connect4.model;
 
 import connect4.view.observerPattern.Observable;
 
+/**
+ * Converts the board in {@code Connect4} to an observable object. This class is
+ * used in the GUI to respond to change.
+ */
 public class ObservableBoard extends Observable {
 
+  private Board board;
+
+  /**
+   * Constructs a new {@code ObservableBoard}
+   *
+   * @param board which will be observed.
+   */
   public ObservableBoard(Board board) {
     this.board = board;
   }
 
-  private Board board;
-
+  /**
+   * Gets the board.
+   *
+   * @return the observed board.
+   */
   public Board getBoard() {
     return board;
   }
 
+  /**
+   * Sets a new board and informs all observers about the change.
+   *
+   * @param board which will be observed.
+   */
   public void setBoard(Board board) {
     setChanged();
     this.board = board;

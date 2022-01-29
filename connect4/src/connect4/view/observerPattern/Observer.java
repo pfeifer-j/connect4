@@ -1,21 +1,12 @@
 package connect4.view.observerPattern;
 
-import connect4.model.Board;
-
 /**
- * A class can implement the {@code Observer} interface when it
- * wants to be informed of changes in observable objects.
- *
- * @version         1.0 8 Jul 2021
- * @author          Me
+ * Implements the {@code Observer}-part of the common observer-pattern.
  */
 public interface Observer {
 
-    /**
-     * This method is called whenever the observed object is changed. An
-     * application calls an {@code Observable} object's
-     * {@code notifyObservers} method to have all the object's
-     * observers notified of the change.
-     */
-    void update();
+  /**
+   * Called whenever the state of an observed object is changed.
+   */
+  void update();
 }
