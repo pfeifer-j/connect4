@@ -5,29 +5,29 @@ import java.util.Vector;
 /**
  * Implements the {@code Observable}-part of the common observer-pattern.
  */
-public class Observable {
+public class CustomObservable {
 
-  private final Vector<Observer> observers;
+  private final Vector<CustomObserver> customObservers;
   private boolean changed = false;
 
   /**
    * Constructs a new {@code Observable}.
    */
-  public Observable() {
-    observers = new Vector<>();
+  public CustomObservable() {
+    customObservers = new Vector<>();
   }
 
   /**
    * Adds a new observer, who will be notified it this objects state changes.
    *
-   * @param observer who is added and will be notified in the future.
+   * @param customObserver who is added and will be notified in the future.
    */
-  public synchronized void addObserver(Observer observer) {
-    if (observer == null) {
+  public synchronized void addObserver(CustomObserver customObserver) {
+    if (customObserver == null) {
       throw new NullPointerException();
     }
-    if (!observers.contains(observer)) {
-      observers.addElement(observer);
+    if (!customObservers.contains(customObserver)) {
+      customObservers.addElement(customObserver);
     }
   }
 
@@ -42,12 +42,12 @@ public class Observable {
       if (!changed) {
         return;
       }
-      arrLocal = observers.toArray();
+      arrLocal = customObservers.toArray();
       changed = false;
     }
 
     for (int i = arrLocal.length - 1; i >= 0; i--) {
-      ((Observer) arrLocal[i]).update();
+      ((CustomObserver) arrLocal[i]).update();
     }
   }
 

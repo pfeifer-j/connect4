@@ -6,7 +6,7 @@ import connect4.model.Coordinates2D;
 import connect4.model.IllegalMoveException;
 import connect4.model.ObservableBoard;
 import connect4.model.Player;
-import connect4.view.observerPattern.Observer;
+import connect4.view.observerPattern.CustomObserver;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -231,6 +231,7 @@ public class C4Panel extends JPanel {
      * gameStack}.
      */
     private static void handleUndo() {
+
       if (gameStack.isEmpty()) {
         C4Panel.statusLabel.setText("There is nothing to undo! It's your "
             + "turn again!");
@@ -408,7 +409,8 @@ public class C4Panel extends JPanel {
    * move their stones into slotPanels. A slot observes the board and responds
    * on change.
    */
-  private static final class SlotPanel extends JPanel implements Observer {
+  private static final class SlotPanel extends JPanel implements
+      CustomObserver {
 
     /**
      * Row of the slotPanel in the gridBagLayout.
