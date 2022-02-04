@@ -1,33 +1,33 @@
-package connect4.view.observerPattern;
+package connectFour.view.observerPattern;
 
 import java.util.Vector;
 
 /**
- * Implements the {@code Observable}-part of the common observer-pattern.
+ * Implements the observable-pattern.
  */
-public class CustomObservable {
+public class C4Observable {
 
-  private final Vector<CustomObserver> customObservers;
+  private final Vector<C4Observer> c4Observers;
   private boolean changed = false;
 
   /**
    * Constructs a new {@code Observable}.
    */
-  public CustomObservable() {
-    customObservers = new Vector<>();
+  public C4Observable() {
+    c4Observers = new Vector<>();
   }
 
   /**
    * Adds a new observer, who will be notified it this objects state changes.
    *
-   * @param customObserver who is added and will be notified in the future.
+   * @param c4Observer who is added and will be notified in the future.
    */
-  public synchronized void addObserver(CustomObserver customObserver) {
-    if (customObserver == null) {
+  public synchronized void addObserver(C4Observer c4Observer) {
+    if (c4Observer == null) {
       throw new NullPointerException();
     }
-    if (!customObservers.contains(customObserver)) {
-      customObservers.addElement(customObserver);
+    if (!c4Observers.contains(c4Observer)) {
+      c4Observers.addElement(c4Observer);
     }
   }
 
@@ -42,12 +42,12 @@ public class CustomObservable {
       if (!changed) {
         return;
       }
-      arrLocal = customObservers.toArray();
+      arrLocal = c4Observers.toArray();
       changed = false;
     }
 
     for (int i = arrLocal.length - 1; i >= 0; i--) {
-      ((CustomObserver) arrLocal[i]).update();
+      ((C4Observer) arrLocal[i]).update();
     }
   }
 

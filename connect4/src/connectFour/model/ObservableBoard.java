@@ -1,12 +1,12 @@
-package connect4.model;
+package connectFour.model;
 
-import connect4.view.observerPattern.CustomObservable;
+import connectFour.view.observerPattern.C4Observable;
 
 /**
- * Converts the board in {@code Connect4} to an observable object. This class is
- * used in the GUI to respond to change.
+ * Converts the board in {@code ConnectFour} to an observable object. This class
+ * is used in the GUI to respond to change.
  */
-public class ObservableBoard extends CustomObservable {
+public class ObservableBoard extends C4Observable {
 
   private Board board;
 

@@ -1,4 +1,4 @@
-package connect4.model;
+package connectFour.model;
 
 /**
  * The class {@code Coordinates2D} is used to represent the position of a tile

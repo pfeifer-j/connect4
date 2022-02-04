@@ -1,8 +1,8 @@
-package connect4.model;
+package connectFour.model;
 
 /**
- * Enum for representing the {@code Player} and a players {@code symbol} in the
- * {@code Board}.
+ * Enum for representing the {@code connectFour.model.Player} and a players
+ * {@code symbol} in the {@code Board}.
  */
 public enum Player {
 
@@ -28,9 +28,9 @@ public enum Player {
   }
 
   /**
-   * Getter for the symbol of a {@code Player}.
+   * Getter for the symbol of a {@code connectFour.model.Player}.
    *
-   * @return The symbol of a {@code Player}.
+   * @return The symbol of a {@code connectFour.model.Player}.
    */
   public String getSymbol() {
     return symbol;
@@ -38,8 +38,9 @@ public enum Player {
 
 
   /**
-   * Returns the opposite player. If {@code this} is {@code Player.Empty} return
-   * {@code Player.Empty}.
+   * Returns the opposite player. If {@code this} is {@code
+   * connectFour.model.Player.Empty} return {@code connectFour.model.Player
+   * .Empty}.
    *
    * @return the opposite player.
    */

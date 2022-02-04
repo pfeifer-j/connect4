@@ -1,4 +1,4 @@
-package connect4.model;
+package connectFour.model;
 
 /**
  * Custom exception used to indicate the use of an illegal move during the game

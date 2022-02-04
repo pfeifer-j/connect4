@@ -1,4 +1,4 @@
-package connect4.model;
+package connectFour.model;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Contains the logic for a regular game of Connect4.
+ * Contains the logic for a regular game of ConnectFour.
  */
-public class Connect4 implements Board {
+public class ConnectFour implements Board {
 
   /**
    * The maximal level which can be selected for playing.
@@ -30,22 +30,22 @@ public class Connect4 implements Board {
   private Collection<Coordinates2D> witnessComputer;
 
   /**
-   * Constructs a new {@code Connect4}-instance using the default settings.
+   * Constructs a new {@code ConnectFour}-instance using the default settings.
    */
-  public Connect4() {
+  public ConnectFour() {
     this.firstPlayer = Player.HUMAN;
-    constructConnect4();
+    constructConnectFour();
   }
 
   /**
-   * Constructs a new {@code Connect4}-instance with a given {@code
+   * Constructs a new {@code ConnectFour}-instance with a given {@code
    * firstPlayer}.
    *
    * @param firstPlayer The new {@code firstPlayer} to start the game.
    */
-  public Connect4(Player firstPlayer) {
+  public ConnectFour(Player firstPlayer) {
     this.firstPlayer = firstPlayer;
-    constructConnect4();
+    constructConnectFour();
   }
 
   /**
@@ -63,13 +63,13 @@ public class Connect4 implements Board {
   }
 
   /**
-   * Constructs a game of connect4. This method is only called by the
+   * Constructs a game of connectFour. This method is only called by the
    * constructors to reduce redundancy.
    */
-  private void constructConnect4() {
-    this.level = Board.CONNECT;
+  private void constructConnectFour() {
+    this.level = CONNECT;
     this.lastStonePlaced = Player.EMPTY;
-    this.board = new Player[Board.ROWS][Board.COLS];
+    this.board = new Player[ROWS][COLS];
 
     for (Player[] row : board) {
       Arrays.fill(row, Player.EMPTY);
@@ -88,16 +88,16 @@ public class Connect4 implements Board {
 
     StringBuilder boardToString = new StringBuilder();
 
-    for (int i = 0; i < Board.ROWS; i++) {
-      for (int j = 0; j < Board.COLS; j++) {
+    for (int i = 0; i < ROWS; i++) {
+      for (int j = 0; j < COLS; j++) {
         boardToString.append(board[i][j].toString());
 
-        if (j < Board.COLS - 1) {
+        if (j < COLS - 1) {
           boardToString.append(" ");
         }
       }
 
-      if (i < Board.COLS - 2) {
+      if (i < COLS - 2) {
         boardToString.append("\n");
       }
     }
@@ -132,7 +132,7 @@ public class Connect4 implements Board {
   @Override
   public Board move(int col) throws IllegalMoveException {
 
-    if (col < 0 || col > Board.COLS - 1) {
+    if (col < 0 || col > COLS - 1) {
       throw new IllegalArgumentException("The given column is not between 1 "
           + "and 7.");
     }
@@ -142,7 +142,7 @@ public class Connect4 implements Board {
           + "game is over or its the turn of the machine.");
     }
 
-    Connect4 clonedBoard = this.clone();
+    ConnectFour clonedBoard = this.clone();
 
     if (clonedBoard.isColFull(col)) {
 
@@ -171,7 +171,7 @@ public class Connect4 implements Board {
     } else {
       int index = getBestIndex();
       assert !isColFull(index);
-      Connect4 clonedBoard = this.clone();
+      ConnectFour clonedBoard = this.clone();
       clonedBoard.dropStone(index, Player.MACHINE);
       lastStonePlaced = Player.MACHINE;
       return clonedBoard;
@@ -198,9 +198,9 @@ public class Connect4 implements Board {
     getWitness();
 
     if (isGameOver()) {
-      if (witnessPlayer.size() >= Board.CONNECT) {
+      if (witnessPlayer.size() >= CONNECT) {
         winner = Player.HUMAN;
-      } else if (witnessComputer.size() >= Board.CONNECT) {
+      } else if (witnessComputer.size() >= CONNECT) {
         winner = Player.MACHINE;
       }
     }
@@ -240,12 +240,12 @@ public class Connect4 implements Board {
    * {@inheritDoc}
    */
   @Override
-  public Connect4 clone() {
-    Connect4 clonedConnect = new Connect4();
+  public ConnectFour clone() {
+    ConnectFour clonedConnect = new ConnectFour();
 
-    Player[][] clonedBoard = new Player[Board.ROWS][Board.COLS];
+    Player[][] clonedBoard = new Player[ROWS][COLS];
 
-    for (int i = 0; i < Board.ROWS; i++) {
+    for (int i = 0; i < ROWS; i++) {
       clonedBoard[i] = board[i].clone();
     }
     clonedConnect.setLevel(level);
@@ -266,9 +266,9 @@ public class Connect4 implements Board {
   private boolean dropStone(int col, Player slot) {
     assert !isColFull(col);
 
-    for (int i = 0; i < Board.ROWS; i++) {
-      if (board[Board.ROWS - 1 - i][col].equals(Player.EMPTY)) {
-        board[Board.ROWS - 1 - i][col] = slot;
+    for (int i = 0; i < ROWS; i++) {
+      if (board[ROWS - 1 - i][col].equals(Player.EMPTY)) {
+        board[ROWS - 1 - i][col] = slot;
         return true;
       }
     }
@@ -380,27 +380,27 @@ public class Connect4 implements Board {
     int groupCounter = 0;
 
     //Outer Loop
-    for (rowCounter = 0; rowCounter < Board.ROWS + Board.COLS - 1;
+    for (rowCounter = 0; rowCounter < ROWS + COLS - 1;
         rowCounter++) {
       savedRowCounter = rowCounter;
 
-      if (rowCounter >= Board.ROWS) {
-        rowCounter = Board.ROWS - 1;
+      if (rowCounter >= ROWS) {
+        rowCounter = ROWS - 1;
       }
       colCounter = 0;
 
-      if (savedRowCounter >= Board.ROWS) {
+      if (savedRowCounter >= ROWS) {
         colCounter = savedRowCounter - rowCounter;
       }
       savedColCounter = rowCounter;
 
       //Inner Loop
-      while (savedColCounter >= 0 && colCounter < Board.COLS) {
+      while (savedColCounter >= 0 && colCounter < COLS) {
         next = board[savedColCounter][colCounter];
 
         if (current != null) {
           boolean lastIteration =
-              (savedColCounter == 0) || (colCounter == Board.COLS - 1);
+              (savedColCounter == 0) || (colCounter == COLS - 1);
           groupCounter = updateGroups(current, next, groupCounter,
               lastIteration);
         } else if (!next.equals(Player.EMPTY)) {
@@ -430,28 +430,28 @@ public class Connect4 implements Board {
     int colCounter;
 
     //Outer Loop
-    for (diagCounter = 0; diagCounter < (Board.ROWS + Board.COLS - 1);
+    for (diagCounter = 0; diagCounter < (ROWS + COLS - 1);
         diagCounter++) {
-      colCounter = Board.COLS - diagCounter - 1;
+      colCounter = COLS - diagCounter - 1;
 
-      if (diagCounter >= Board.COLS) {
+      if (diagCounter >= COLS) {
         colCounter = 0;
       }
 
       //Inner Loop
       for (int rowCounter = 0;
-          rowCounter < Board.ROWS && colCounter < Board.COLS; rowCounter++) {
+          rowCounter < ROWS && colCounter < COLS; rowCounter++) {
 
-        if (diagCounter >= Board.COLS) {
-          rowCounter = diagCounter - Board.COLS + 1 + colCounter;
+        if (diagCounter >= COLS) {
+          rowCounter = diagCounter - COLS + 1 + colCounter;
         }
         next = board[rowCounter][colCounter];
 
         if (current != null) {
           boolean lastIteration =
-              (diagCounter == (Board.ROWS + Board.COLS - 1 - 3) - 1) || (
-                  rowCounter == Board.ROWS - 1) || (colCounter
-                  == Board.COLS - 1);
+              (diagCounter == (ROWS + COLS - 1 - 3) - 1) || (
+                  rowCounter == ROWS - 1) || (colCounter
+                  == COLS - 1);
           groupCounter = updateGroups(current, next, groupCounter,
               lastIteration);
         } else if (!next.equals(Player.EMPTY)) {
@@ -469,9 +469,10 @@ public class Connect4 implements Board {
 
   /**
    * Updated {@code groupCounterArray} which contains the number of groups for
-   * {@code Player.HUMAN} and {@code Player.MACHINE}. groupCounterArray[0]
-   * contains the groups of the human. groupCounterArray[1] contains the groups
-   * of the machine.
+   * {@code connectFour.model.Player.HUMAN} and {@code connectFour.model
+   * .Player.MACHINE}.
+   * groupCounterArray[0] contains the groups of the human. groupCounterArray[1]
+   * contains the groups of the machine.
    *
    * @param current       Contains the current player.
    * @param next          Contains the next player.
@@ -490,7 +491,7 @@ public class Connect4 implements Board {
     } else if (current.equals(Player.EMPTY)) {
       return 1;
 
-      // Same Player to same Player
+      // Same connectFour.model.Player to same connectFour.model.Player
     } else if (current.equals(next)) {
       ++groupCounter;
       if (lastIteration && groupCounter >= 2 || groupCounter >= 4) {
@@ -504,7 +505,7 @@ public class Connect4 implements Board {
       }
       return groupCounter;
 
-      //P/C to different Player
+      //P/C to different connectFour.model.Player
     } else {
       if (groupCounter >= 2 && groupCounter <= 4) {
 
@@ -533,10 +534,10 @@ public class Connect4 implements Board {
       if (board[row][col].equals(Player.MACHINE)) {
         witnessPlayer.clear();
         witnessComputer.add(
-            new Coordinates2D((-1 * (row - (Board.ROWS - 1)) + 1), col + 1));
+            new Coordinates2D((-1 * (row - (ROWS - 1)) + 1), col + 1));
       } else if (board[row][col].equals(Player.HUMAN)) {
         witnessPlayer.add(
-            new Coordinates2D((-1 * (row - (Board.ROWS - 1)) + 1), col + 1));
+            new Coordinates2D((-1 * (row - (ROWS - 1)) + 1), col + 1));
         witnessComputer.clear();
       } else {
         witnessPlayer.clear();
@@ -583,9 +584,9 @@ public class Connect4 implements Board {
 
   /**
    * Calculates the amount of stones of each player in a specified column.
-   * slotsPerCol[0] = slots in the specified column of the {@code Player.HUMAN}.
-   * slotsPerCol[1] = slots in the specified column of the {@code Player
-   * .MACHINE}.
+   * slotsPerCol[0] = slots in the specified column of the {@code
+   * connectFour.model.Player.HUMAN}. slotsPerCol[1] = slots in the specified
+   * column of the {@code connectFour.model.Player .MACHINE}.
    *
    * @return The number of stones of both players in a given column.
    */
@@ -606,20 +607,20 @@ public class Connect4 implements Board {
 
 
   /**
-   * Calculates the best column for the {@code Player.MACHINE} using a game-tree
-   * and the mini-max-algorithm.
+   * Calculates the best column for the {@code connectFour.model.Player.MACHINE}
+   * using a game-tree and the mini-max-algorithm.
    *
    * @return the ideal column.
    */
   private int getBestIndex() throws InterruptedException {
     int currentLevel = level;
-    Connect4 tree = clone();
+    ConnectFour tree = clone();
     return tree.getHighestEval(currentLevel)[1];
   }
 
   /**
    * Calculates the column in which a stone can be thrown to achieve the best
-   * possible {@code board} for the {@code Player.MACHINE}.
+   * possible {@code board} for the {@code connectFour.model.Player.MACHINE}.
    * <p>
    * This method shares redundant parts with getLowestEval are kept separate for
    * better readability and understanding.
@@ -636,9 +637,9 @@ public class Connect4 implements Board {
     int[] result = new int[2];
     result[0] = Integer.MIN_VALUE;
 
-    for (int i = 0; i < Board.COLS; i++) {
+    for (int i = 0; i < COLS; i++) {
       if (!isColFull(i)) {
-        Connect4 child = clone();
+        ConnectFour child = clone();
         child.dropStone(i, Player.MACHINE);
         int maxScore = child.evaluate(height);
 
@@ -657,7 +658,7 @@ public class Connect4 implements Board {
 
   /**
    * Calculates the column in which a stone can be thrown to achieve the worst
-   * possible {@code board} for the {@code Player.MACHINE}.
+   * possible {@code board} for the {@code connectFour.model.Player.MACHINE}.
    * <p>
    * This method shares redundant parts with getHighestEval are kept separate
    * for better readability and understanding.
@@ -674,10 +675,10 @@ public class Connect4 implements Board {
     int[] result = new int[2];
     result[0] = Integer.MAX_VALUE;
 
-    for (int i = 0; i < Board.COLS; i++) {
+    for (int i = 0; i < COLS; i++) {
       if (!isColFull(i)) {
 
-        Connect4 child = clone();
+        ConnectFour child = clone();
         child.dropStone(i, Player.HUMAN);
         int minScore = child.evaluate(height);
 

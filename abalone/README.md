@@ -1,3 +1,0 @@
-# GUI
-
-Projekt 3

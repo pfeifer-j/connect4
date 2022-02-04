@@ -1,12 +1,12 @@
-package connect4;
+package connectFour;
 
-import connect4.view.C4Frame;
+import connectFour.view.C4Frame;
 import javax.swing.SwingUtilities;
 
 /**
  * Entrypoint of the program, which starts the game.
  */
-public final class Main {
+public class Main {
 
   /**
    * Prevents the initialisation of the utility-class {@code Main}. Since its
@@ -23,6 +23,9 @@ public final class Main {
    * @param args not in use.
    */
   public static void main(String[] args) {
+
+    // Used for thread-safety.
     SwingUtilities.invokeLater(C4Frame::getFrame);
   }
+
 }

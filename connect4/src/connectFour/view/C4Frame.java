@@ -1,6 +1,7 @@
-package connect4.view;
+package connectFour.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.JFrame;
 
 /**
@@ -12,7 +13,7 @@ public class C4Frame extends JFrame {
   /**
    * The only instance of the {@code C4Frame}.
    */
-  private static final C4Frame c4frame = new C4Frame();
+  private static final C4Frame C4_FRAME = new C4Frame();
 
   /**
    * The constructor is private to limit the usage.
@@ -33,7 +34,7 @@ public class C4Frame extends JFrame {
 
     // Resize window to fit every component and save the resulting size.
     pack();
-    //setMinimumSize(new Dimension(getSize().width, getSize().height));
+    setMinimumSize(new Dimension(getSize().width, getSize().height));
   }
 
   /**
@@ -42,6 +43,6 @@ public class C4Frame extends JFrame {
    * @return the {@code C4Frame}-instance.
    */
   public static JFrame getFrame() {
-    return c4frame;
+    return C4_FRAME;
   }
 }
