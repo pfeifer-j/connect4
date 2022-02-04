@@ -39,8 +39,7 @@ public enum Player {
 
   /**
    * Returns the opposite player. If {@code this} is {@code
-   * connectFour.model.Player.Empty} return {@code connectFour.model.Player
-   * .Empty}.
+   * connectFour.model.Player.Empty} return {@code Player.Empty}.
    *
    * @return the opposite player.
    */

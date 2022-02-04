@@ -470,9 +470,8 @@ public class ConnectFour implements Board {
   /**
    * Updated {@code groupCounterArray} which contains the number of groups for
    * {@code connectFour.model.Player.HUMAN} and {@code connectFour.model
-   * .Player.MACHINE}.
-   * groupCounterArray[0] contains the groups of the human. groupCounterArray[1]
-   * contains the groups of the machine.
+   * .Player.MACHINE}. groupCounterArray[0] contains the groups of the human.
+   * groupCounterArray[1] contains the groups of the machine.
    *
    * @param current       Contains the current player.
    * @param next          Contains the next player.

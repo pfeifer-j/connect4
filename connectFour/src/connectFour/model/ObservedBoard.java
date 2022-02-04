@@ -6,7 +6,7 @@ import connectFour.view.observerPattern.C4Observable;
  * Converts the board in {@code ConnectFour} to an observable object. This class
  * is used in the GUI to respond to change.
  */
-public class ObservableBoard extends C4Observable {
+public class ObservedBoard extends C4Observable {
 
   private Board board;
 
@@ -15,7 +15,7 @@ public class ObservableBoard extends C4Observable {
    *
    * @param board which will be observed.
    */
-  public ObservableBoard(Board board) {
+  public ObservedBoard(Board board) {
     this.board = board;
   }
 

@@ -8,7 +8,7 @@ import javax.swing.JFrame;
  * Models the window of the connect4 game. This class uses the singleton pattern
  * to ensure that only one game can run at a time.
  */
-public class C4Frame extends JFrame {
+public final class C4Frame extends JFrame {
 
   /**
    * The only instance of the {@code C4Frame}.

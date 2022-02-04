@@ -4,7 +4,7 @@ import connectFour.model.Board;
 import connectFour.model.ConnectFour;
 import connectFour.model.Coordinates2D;
 import connectFour.model.IllegalMoveException;
-import connectFour.model.ObservableBoard;
+import connectFour.model.ObservedBoard;
 import connectFour.model.Player;
 import connectFour.view.observerPattern.C4Observer;
 import java.awt.BorderLayout;
@@ -89,14 +89,6 @@ public class C4Panel extends JPanel {
    */
   private static final int SIZE_DIVIDER = 2;
   /**
-   * Converter for transferring the information about the state of the {@code
-   * Board} since the controller and view have to be able to react to change
-   * within the board. Saved statically since the utility-class C4Controller has
-   * to be able to access it.
-   */
-  private static final ObservableBoard observableBoard = new ObservableBoard(
-      new ConnectFour());
-  /**
    * Preferred size of the gameSlots. Used for height and width.
    */
   private static final int SLOT_SIZE = 50;
@@ -105,6 +97,13 @@ public class C4Panel extends JPanel {
    */
   private static final Dimension SLOT_PANEL_SIZE = new Dimension(SLOT_SIZE,
       SLOT_SIZE);
+  /**
+   * Converter for transferring the information about the state of the {@code
+   * Board} since the controller and view have to be able to react to change
+   * within the board.
+   */
+  private final ObservedBoard observedBoard = new ObservedBoard(
+      new ConnectFour());
   /**
    * Used to present information about the current gameState.
    */
@@ -167,9 +166,9 @@ public class C4Panel extends JPanel {
     level = newLevel;
 
     // Update the level in the boardObserver.
-    Board newConnectFour = observableBoard.getBoard();
+    Board newConnectFour = observedBoard.getBoard();
     newConnectFour.setLevel(newLevel);
-    observableBoard.setBoard(newConnectFour.clone());
+    observedBoard.setBoard(newConnectFour.clone());
 
     // Inform the user about the successful level change.
     statusLabel.setText("The new level is " + level + ".");
@@ -195,11 +194,11 @@ public class C4Panel extends JPanel {
     // Start a new game. If there is no firstPlayer given as a parameter,
     // use the firstPlayer of the old game.
     if (firstPlayer == null) {
-      firstPlayer = observableBoard.getBoard().getFirstPlayer();
+      firstPlayer = observedBoard.getBoard().getFirstPlayer();
     }
-    observableBoard.setBoard(new ConnectFour(firstPlayer));
+    observedBoard.setBoard(new ConnectFour(firstPlayer));
     currentPlayer = firstPlayer;
-    observableBoard.getBoard().setLevel(level);
+    observedBoard.getBoard().setLevel(level);
 
     // If the machine has the first move, this move is executed now to
     // simplify the handleMove()-method immensely.
@@ -217,7 +216,7 @@ public class C4Panel extends JPanel {
    * Starts a new game while the firstPlayer is switched.
    */
   private void handleSwitch() {
-    Player newFirstPlayer = observableBoard.getBoard().getFirstPlayer()
+    Player newFirstPlayer = observedBoard.getBoard().getFirstPlayer()
         .opposite();
     handleNew(newFirstPlayer);
   }
@@ -237,7 +236,7 @@ public class C4Panel extends JPanel {
       // Necessary for a responsive user-experience.
       interruptMachineMove();
 
-      observableBoard.setBoard(gameStack.pop());
+      observedBoard.setBoard(gameStack.pop());
       statusLabel.setText("Your move was undone. It's your turn!");
     }
   }
@@ -265,7 +264,7 @@ public class C4Panel extends JPanel {
   private void handleMove(int column) {
 
     // Only allow a move to be made, if the game is still running.
-    if (observableBoard.getBoard().isGameOver()) {
+    if (observedBoard.getBoard().isGameOver()) {
       statusLabel.setText("The game is over." + getWinnerText());
 
       // Warn the player, if the machine is still calculating.
@@ -298,18 +297,18 @@ public class C4Panel extends JPanel {
 
     // Only execute a move, if it's the humans turn and if the game is still
     // running.
-    if (currentPlayer != Player.HUMAN && observableBoard.getBoard()
+    if (currentPlayer != Player.HUMAN && observedBoard.getBoard()
         .isGameOver()) {
       return false;
     } else {
 
       // Update the gameStack before the move was made by pushing a cloned
       // version of the current game onto the stack.
-      gameStack.push(observableBoard.getBoard().clone());
+      gameStack.push(observedBoard.getBoard().clone());
 
       Board connectFour;
       try {
-        connectFour = observableBoard.getBoard().move(column);
+        connectFour = observedBoard.getBoard().move(column);
       } catch (IllegalMoveException e) {
         statusLabel.setText("A illegal move was executed.");
         return false;
@@ -321,7 +320,7 @@ public class C4Panel extends JPanel {
         statusLabel.setText("The selected column is full! ");
         return false;
       } else {
-        observableBoard.setBoard(connectFour);
+        observedBoard.setBoard(connectFour);
         currentPlayer = Player.MACHINE;
         return true;
       }
@@ -334,8 +333,8 @@ public class C4Panel extends JPanel {
    * @return a message about the winning player or if there was a tie.
    */
   private String getWinnerText() {
-    if (observableBoard.getBoard().isGameOver()) {
-      Player winner = observableBoard.getBoard().getWinner();
+    if (observedBoard.getBoard().isGameOver()) {
+      Player winner = observedBoard.getBoard().getWinner();
 
       if (winner == null) {
         return "The game was a tie.";
@@ -440,10 +439,9 @@ public class C4Panel extends JPanel {
     public void run() {
 
       // Update the clonedBoard and check if the game is over.
-      Board clonedBoard = observableBoard.getBoard().clone();
+      Board clonedBoard = observedBoard.getBoard().clone();
       if (clonedBoard.isGameOver()) {
-        statusLabel.setText("The game is already over! "
-            + getWinnerText());
+        statusLabel.setText(getWinnerText());
       } else {
 
         // If the game is still running, execute the move.
@@ -459,7 +457,7 @@ public class C4Panel extends JPanel {
           // than just resetting the level everytime.
           clonedBoard.setLevel(level);
 
-          observableBoard.setBoard(clonedBoard.clone());
+          observedBoard.setBoard(clonedBoard.clone());
           currentPlayer = Player.HUMAN;
 
           // Inform the user about the gameState.
@@ -518,7 +516,7 @@ public class C4Panel extends JPanel {
 
       // The slot observes the board and therefore has to be added as an
       // observer to observableBoard.
-      observableBoard.addObserver(this);
+      observedBoard.addObserver(this);
 
       // Setting the panelProperties.
       setPreferredSize(SLOT_PANEL_SIZE);
@@ -591,7 +589,7 @@ public class C4Panel extends JPanel {
     private void updateMarkedSlot() {
 
       // The method getWitness() expects getWinner() to be called first.
-      assert (observableBoard.getBoard().getWinner() == null);
+      assert (observedBoard.getBoard().getWinner() == null);
 
       highlighted = false;
 
@@ -603,7 +601,7 @@ public class C4Panel extends JPanel {
       int convertedCol = column + 1;
       Coordinates2D current = new Coordinates2D(convertedRow, convertedCol);
       Collection<Coordinates2D> witnesses =
-          observableBoard.getBoard().getWitness();
+          observedBoard.getBoard().getWitness();
 
       // Check if the slot is part of the witness.
       witnesses.forEach(witness -> {
@@ -618,15 +616,15 @@ public class C4Panel extends JPanel {
      */
     @Override
     public void update() {
-      player = observableBoard.getBoard().getSlot(row, column);
+      player = observedBoard.getBoard().getSlot(row, column);
 
       // All slots have to be unmarked while the game is still running.
       highlighted = false;
 
       // Only if the game is won by a player, mark all winning slots.
       // Otherwise, do nothing.
-      if (observableBoard.getBoard().isGameOver()
-          && observableBoard.getBoard().getWinner() != null) {
+      if (observedBoard.getBoard().isGameOver()
+          && observedBoard.getBoard().getWinner() != null) {
         updateMarkedSlot();
 
         // Inform user about the winner.
@@ -689,7 +687,7 @@ public class C4Panel extends JPanel {
   /**
    * Models the panel in which all buttons are placed.
    */
-  private class ButtonPanel extends JPanel {
+  private final class ButtonPanel extends JPanel {
 
     /**
      * Construct a new {@code ButtonPanel}.
