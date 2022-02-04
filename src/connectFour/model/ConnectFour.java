@@ -21,13 +21,43 @@ public class ConnectFour implements Board {
    */
   public static final int WINNING_ROW_LENGTH = 4;
 
+  /**
+   * The board which contains all slots of the game and their owners.
+   */
   private Player[][] board;
+
+  /**
+   * Contains the current level. The level is an indicator for the difficulty.
+   */
   private int level;
+
+  /**
+   * The {@code Player} who starts the game.
+   */
   private Player firstPlayer;
-  private Player lastStonePlaced;
+
+  /**
+   * The {@code Player} who executed the last turn.
+   */
+  private Player lastPlayer;
+
+  /**
+   * Stores the groups of each player. Used in the calculation of the next
+   * machineMove and in the calculation of the winner.
+   */
   private int[][] groupCounterArray;
-  private Collection<Coordinates2D> witnessPlayer;
-  private Collection<Coordinates2D> witnessComputer;
+
+  /**
+   * Stores the witness of the {@code Player.HUMAN}. A witness is a group of
+   * four slots which indicate that the game was won.
+   */
+  private Collection<Coordinates2D> witnessHuman;
+
+  /**
+   * Stores the witness of the {@code Player.MACHINE}. A witness is a group of
+   * four slots which indicate that the game was won.
+   */
+  private Collection<Coordinates2D> witnessMACHINE;
 
   /**
    * Constructs a new {@code ConnectFour}-instance using the default settings.
@@ -64,11 +94,11 @@ public class ConnectFour implements Board {
 
   /**
    * Constructs a game of connectFour. This method is only called by the
-   * constructors to reduce redundancy.
+   * constructors and used to reduce redundancy.
    */
   private void constructConnectFour() {
     this.level = CONNECT;
-    this.lastStonePlaced = Player.EMPTY;
+    this.lastPlayer = Player.EMPTY;
     this.board = new Player[ROWS][COLS];
 
     for (Player[] row : board) {
@@ -76,8 +106,8 @@ public class ConnectFour implements Board {
     }
 
     groupCounterArray = new int[2][3];
-    witnessPlayer = new LinkedList<>();
-    witnessComputer = new LinkedList<>();
+    witnessHuman = new LinkedList<>();
+    witnessMACHINE = new LinkedList<>();
   }
 
   /**
@@ -85,18 +115,19 @@ public class ConnectFour implements Board {
    */
   @Override
   public String toString() {
-
     StringBuilder boardToString = new StringBuilder();
 
     for (int i = 0; i < ROWS; i++) {
       for (int j = 0; j < COLS; j++) {
         boardToString.append(board[i][j].toString());
 
+        // Empty space for better positioning between the symbols.
         if (j < COLS - 1) {
           boardToString.append(" ");
         }
       }
 
+      // Add a new line after each row.
       if (i < COLS - 2) {
         boardToString.append("\n");
       }
@@ -122,40 +153,39 @@ public class ConnectFour implements Board {
     return firstPlayer;
   }
 
-  private void setFirstPlayer(Player firstPlayer) {
-    this.firstPlayer = firstPlayer;
-  }
-
   /**
    * {@inheritDoc}
    */
   @Override
   public Board move(int col) throws IllegalMoveException {
 
+    // The given column has to be within the legal range.
     if (col < 0 || col > COLS - 1) {
       throw new IllegalArgumentException("The given column is not between 1 "
           + "and 7.");
     }
 
-    if (lastStonePlaced.equals(Player.HUMAN) || isGameOver()) {
+    // The human must not be allowed to place more than one stone at a time.
+    if (lastPlayer.equals(Player.HUMAN) || isGameOver()) {
       throw new IllegalMoveException("This move is not allowed. Either the "
           + "game is over or its the turn of the machine.");
     }
 
     ConnectFour clonedBoard = this.clone();
 
+    // If the column was full, return null.
     if (clonedBoard.isColFull(col)) {
-
-      // The board is full and therefore null is returned.
       return null;
     } else {
       boolean stoneCouldBeSet = clonedBoard.dropStone(col, Player.HUMAN);
+
+      // Warn the player if the move was illegal.
       if (!stoneCouldBeSet) {
         throw new IllegalMoveException("The stone couldn't be put in this "
-            + "column.");
+            + "column. Illegal move.");
       }
 
-      lastStonePlaced = Player.HUMAN;
+      lastPlayer = Player.HUMAN;
       return clonedBoard;
     }
   }
@@ -166,14 +196,17 @@ public class ConnectFour implements Board {
   @Override
   public Board machineMove() throws IllegalMoveException, InterruptedException {
 
-    if (lastStonePlaced.equals(Player.MACHINE)) {
+    // Execution is only allowed if the last move was played by the human.
+    if (lastPlayer.equals(Player.MACHINE)) {
       throw new IllegalMoveException("");
     } else {
+
+      // Calculate the best index for the turn using the minimax-algorithm.
       int index = getBestIndex();
       assert !isColFull(index);
       ConnectFour clonedBoard = this.clone();
       clonedBoard.dropStone(index, Player.MACHINE);
-      lastStonePlaced = Player.MACHINE;
+      lastPlayer = Player.MACHINE;
       return clonedBoard;
     }
   }
@@ -183,8 +216,10 @@ public class ConnectFour implements Board {
    */
   @Override
   public void setLevel(int newLevel) {
+
     // The highest level that will be set is saved in MAX_LEVEL.
     // In the GUI the player can only select levels up to MAX_LEVEL.
+    assert newLevel >= 1 && newLevel <= MAX_LEVEL;
     this.level = newLevel;
   }
 
@@ -195,12 +230,13 @@ public class ConnectFour implements Board {
   public Player getWinner() {
     Player winner = null;
 
+    //
     getWitness();
 
     if (isGameOver()) {
-      if (witnessPlayer.size() >= CONNECT) {
+      if (witnessHuman.size() >= CONNECT) {
         winner = Player.HUMAN;
-      } else if (witnessComputer.size() >= CONNECT) {
+      } else if (witnessMACHINE.size() >= CONNECT) {
         winner = Player.MACHINE;
       }
     }
@@ -212,12 +248,15 @@ public class ConnectFour implements Board {
    */
   @Override
   public Collection<Coordinates2D> getWitness() {
+
+    // There can only be a witness, if the game is over.
     if (isGameOver()) {
 
-      if (witnessPlayer.size() >= WINNING_ROW_LENGTH) {
-        return sortCollection(witnessPlayer);
-      } else if (witnessComputer.size() >= WINNING_ROW_LENGTH) {
-        return sortCollection(witnessComputer);
+      // The winner is decided by checking if there is a witness.
+      if (witnessHuman.size() >= WINNING_ROW_LENGTH) {
+        return sortCollection(witnessHuman);
+      } else if (witnessMACHINE.size() >= WINNING_ROW_LENGTH) {
+        return sortCollection(witnessMACHINE);
       }
     } else {
       throw new IllegalStateException("There is no witness yet.");
@@ -241,23 +280,25 @@ public class ConnectFour implements Board {
    */
   @Override
   public ConnectFour clone() {
+
+    // Create a new instance of {@code ConnectFour}.
     ConnectFour clonedConnect = new ConnectFour();
 
+    // Fill this instance by cloning the current gameState.
     Player[][] clonedBoard = new Player[ROWS][COLS];
-
     for (int i = 0; i < ROWS; i++) {
       clonedBoard[i] = board[i].clone();
     }
-    clonedConnect.setLevel(level);
-    clonedConnect.setFirstPlayer(firstPlayer);
     clonedConnect.board = clonedBoard;
-    clonedConnect.lastStonePlaced = lastStonePlaced;
+    clonedConnect.level = level;
+    clonedConnect.firstPlayer = firstPlayer;
+    clonedConnect.lastPlayer = lastPlayer;
 
     return clonedConnect;
   }
 
   /**
-   * Drops a stone into a given column. This methods
+   * Drops a stone into a given column, if the column is not full yet.
    *
    * @param col  The column in which a stone is placed.
    * @param slot The slot-type which should be placed.
@@ -290,7 +331,8 @@ public class ConnectFour implements Board {
   }
 
   /**
-   * Calculates all occurring groups in the {@code board}.
+   * Calculates all occurring groups in the {@code board}. Possible groups have
+   * 2, 3 or 4 slots in a row.
    */
   private void calculateAllGroups() {
     groupCounterArray = new int[2][3];
@@ -326,16 +368,6 @@ public class ConnectFour implements Board {
       groupCounter = 0;
 
       clearWitnesses();
-    }
-  }
-
-  /**
-   * Resets the witnesses.
-   */
-  private void clearWitnesses() {
-    if (witnessPlayer.size() < 4 && witnessComputer.size() < 4) {
-      witnessPlayer.clear();
-      witnessComputer.clear();
     }
   }
 
@@ -466,12 +498,24 @@ public class ConnectFour implements Board {
     }
   }
 
+  /**
+   * Resets the witnesses after the groups of a direction where updated without
+   * finding a group with at least 4 members.
+   */
+  private void clearWitnesses() {
+    if (witnessHuman.size() < 4 && witnessMACHINE.size() < 4) {
+      witnessHuman.clear();
+      witnessMACHINE.clear();
+    }
+  }
 
   /**
-   * Updated {@code groupCounterArray} which contains the number of groups for
-   * {@code connectFour.model.Player.HUMAN} and {@code connectFour.model
-   * .Player.MACHINE}. groupCounterArray[0] contains the groups of the human.
-   * groupCounterArray[1] contains the groups of the machine.
+   * Updates {@code groupCounterArray} which contains the number of groups for
+   * {@code Player.HUMAN} and {@code Player.MACHINE}. groupCounterArray[0]
+   * contains the groups of the human. groupCounterArray[1] contains the groups
+   * of the machine. In groupCounterArray[1][0] are groups with two members
+   * stored. In groupCounterArray[1][1] are groups with three members stored. In
+   * groupCounterArray[1][2] are groups with four members stored.
    *
    * @param current       Contains the current player.
    * @param next          Contains the next player.
@@ -482,15 +526,15 @@ public class ConnectFour implements Board {
   private int updateGroups(Player current, Player next,
       int groupCounter, boolean lastIteration) {
 
-    //Empty to Empty
+    // Last slot is Empty and next slot Empty.
     if (current.equals(Player.EMPTY) && next.equals(Player.EMPTY)) {
       return 0;
 
-      // Empty to P/C
+      // Last slot is owned by the human and next slot is owned by the machine.
     } else if (current.equals(Player.EMPTY)) {
       return 1;
 
-      // Same connectFour.model.Player to same connectFour.model.Player
+      // Last slot is owned by the human and next slot is owned by the human.
     } else if (current.equals(next)) {
       ++groupCounter;
       if (lastIteration && groupCounter >= 2 || groupCounter >= 4) {
@@ -504,7 +548,7 @@ public class ConnectFour implements Board {
       }
       return groupCounter;
 
-      //P/C to different connectFour.model.Player
+      // The last and current slot differ.
     } else {
       if (groupCounter >= 2 && groupCounter <= 4) {
 
@@ -519,28 +563,32 @@ public class ConnectFour implements Board {
   }
 
   /**
-   * Used to keep track of the witnesses of the game.
+   * Used to keep track of the witnesses of the game. Since the indices used in
+   * an array differ from the coordinates of a standard coordinate system, the
+   * values have to be adjusted.
    *
    * @param row Row of the currently observed element of the {@code board}.
    * @param col Column of the currently observed element of the {@code board}.
    */
   private void updateWitnesses(int row, int col) {
+    if (!(witnessHuman.size() >= 4 || witnessMACHINE.size() >= 4)) {
 
-    if (!(witnessPlayer.size() >= 4 || witnessComputer.size() >= 4)) {
-
-      //Since the indices used in an array differ from the coordinates of a
-      // standard coordinate system, the values have to be adjusted.
+      // Add the coordinates the observed slot belongs to the machine.
       if (board[row][col].equals(Player.MACHINE)) {
-        witnessPlayer.clear();
-        witnessComputer.add(
+        witnessHuman.clear();
+        witnessMACHINE.add(
             new Coordinates2D((-1 * (row - (ROWS - 1)) + 1), col + 1));
+
+        // Add the coordinates the observed slot belongs to the human.
       } else if (board[row][col].equals(Player.HUMAN)) {
-        witnessPlayer.add(
+        witnessHuman.add(
             new Coordinates2D((-1 * (row - (ROWS - 1)) + 1), col + 1));
-        witnessComputer.clear();
+        witnessMACHINE.clear();
+
+        // Otherwise, clear both witnessLists.
       } else {
-        witnessPlayer.clear();
-        witnessComputer.clear();
+        witnessHuman.clear();
+        witnessMACHINE.clear();
       }
     }
   }
@@ -554,7 +602,7 @@ public class ConnectFour implements Board {
    */
   private int evaluate(int height) {
 
-    //Calculating the quality of the occurring groupSizes for both players.
+    // Calculating the quality of the occurring groupSizes for both players.
     calculateAllGroups();
     int[] playerGroups = groupCounterArray[0];
     int[] machineGroups = groupCounterArray[1];
@@ -562,7 +610,7 @@ public class ConnectFour implements Board {
         + 5000 * machineGroups[2] - playerGroups[0] - 4 * playerGroups[1]
         - 500000 * playerGroups[2];
 
-    //Calculating the quality of the positioning of the slot's where  filled.
+    // Calculating the quality of the positioning of the slot's where  filled.
     int[] playerCols = getSlotsPerCol()[0];
     int[] machineCols = getSlotsPerCol()[1];
     int placements = machineCols[1] + 2 * machineCols[2] + 3 * machineCols[3]
@@ -570,7 +618,7 @@ public class ConnectFour implements Board {
         - 2 * playerCols[2] - 3 * playerCols[3] - 2 * playerCols[4]
         - playerCols[5];
 
-    //Adding the instant win bonus if the machine could win immediately.
+    // Adding the instant win bonus if the machine could win immediately.
     int instaWin;
     if (height == level - 1 && (machineGroups[2] >= 1)) {
       instaWin = 5000000;
@@ -583,9 +631,9 @@ public class ConnectFour implements Board {
 
   /**
    * Calculates the amount of stones of each player in a specified column.
-   * slotsPerCol[0] = slots in the specified column of the {@code
-   * connectFour.model.Player.HUMAN}. slotsPerCol[1] = slots in the specified
-   * column of the {@code connectFour.model.Player .MACHINE}.
+   * slotsPerCol[0] = slots in the specified column of the {@code Player
+   * .HUMAN}. slotsPerCol[1] = slots in the specified column of the {@code
+   * Player.MACHINE}.
    *
    * @return The number of stones of both players in a given column.
    */
@@ -606,8 +654,8 @@ public class ConnectFour implements Board {
 
 
   /**
-   * Calculates the best column for the {@code connectFour.model.Player.MACHINE}
-   * using a game-tree and the mini-max-algorithm.
+   * Calculates the best column for the {@code Player.MACHINE} using a game-tree
+   * and the mini-max-algorithm.
    *
    * @return the ideal column.
    */
@@ -619,10 +667,9 @@ public class ConnectFour implements Board {
 
   /**
    * Calculates the column in which a stone can be thrown to achieve the best
-   * possible {@code board} for the {@code connectFour.model.Player.MACHINE}.
-   * <p>
-   * This method shares redundant parts with getLowestEval are kept separate for
-   * better readability and understanding.
+   * possible {@code board} for the {@code Player.MACHINE}. This method shares
+   * redundant parts with getLowestEval are kept separate for better readability
+   * and understanding.
    *
    * @param height Represents the level or the depth of the recursion used.
    * @return The calculated score of a {@code board} and the column in which the
@@ -657,10 +704,9 @@ public class ConnectFour implements Board {
 
   /**
    * Calculates the column in which a stone can be thrown to achieve the worst
-   * possible {@code board} for the {@code connectFour.model.Player.MACHINE}.
-   * <p>
-   * This method shares redundant parts with getHighestEval are kept separate
-   * for better readability and understanding.
+   * possible {@code board} for the {@code Player.MACHINE}. This method shares
+   * redundant parts with getHighestEval are kept separate for better
+   * readability and understanding.
    *
    * @param height Represents the level or the depth of the recursion used.
    * @return The calculated score of a {@code board} and the column in which the
@@ -694,7 +740,7 @@ public class ConnectFour implements Board {
   }
 
   /**
-   * Checks if a given column is already full.
+   * Checks, if a given column is already full.
    *
    * @param col Column to be checked.
    * @return True if the column is already full.

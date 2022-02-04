@@ -1,12 +1,12 @@
 package connectFour.view.observerPattern;
 
 /**
- * Implements the observer-pattern.
+ * Implements the custom version of the observer-pattern.
  */
 public interface C4Observer {
 
   /**
-   * Updates the observers about the changes state of an observed object.
+   * Informs the observers about change within the observed object.
    */
   void update();
 }

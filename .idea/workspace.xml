@@ -4,11 +4,13 @@
     <list default="true" id="797137ec-b716-4b7a-a0f8-a7f4bcea3ccd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/connectFour_gui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/connectFour_gui.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connectFour/src/connectFour/model/ConnectFour.java" beforeDir="false" afterPath="$PROJECT_DIR$/connectFour/src/connectFour/model/ConnectFour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connectFour/src/connectFour/model/ObservableBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/connectFour/src/connectFour/model/ObservedBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connectFour/src/connectFour/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/connectFour/src/connectFour/model/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connectFour/src/connectFour/view/C4Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/connectFour/src/connectFour/view/C4Frame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connectFour/src/connectFour/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/connectFour/src/connectFour/view/C4Panel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/model/ConnectFour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/model/ConnectFour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/model/ObservedBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/model/ObservedBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/model/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/C4Frame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/view/observerPattern/C4Observable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/observerPattern/C4Observable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/view/observerPattern/C4Observer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/observerPattern/C4Observer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,6 +126,7 @@
       <workItem from="1643980752036" duration="79000" />
       <workItem from="1643980858519" duration="23000" />
       <workItem from="1643981592383" duration="674000" />
+      <workItem from="1643993364667" duration="10468000" />
     </task>
     <servers />
   </component>

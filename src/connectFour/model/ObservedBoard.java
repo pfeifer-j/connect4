@@ -4,10 +4,14 @@ import connectFour.view.observerPattern.C4Observable;
 
 /**
  * Converts the board in {@code ConnectFour} to an observable object. This class
- * is used in the GUI to respond to change.
+ * is used in the GUI to respond to change and therefore extends the custom
+ * observable-pattern {@code C4Observable} used in this project.
  */
 public class ObservedBoard extends C4Observable {
 
+  /**
+   * The board which contains all slots of the game and their owners.
+   */
   private Board board;
 
   /**

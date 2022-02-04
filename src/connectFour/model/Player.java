@@ -38,8 +38,8 @@ public enum Player {
 
 
   /**
-   * Returns the opposite player. If {@code this} is {@code
-   * connectFour.model.Player.Empty} return {@code Player.Empty}.
+   * Returns the opposite player. If {@code this} is {@code Player.Empty} return
+   * {@code Player.Empty}.
    *
    * @return the opposite player.
    */

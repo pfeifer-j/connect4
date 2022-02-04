@@ -3,12 +3,12 @@ package connectFour.view.observerPattern;
 import java.util.Vector;
 
 /**
- * Implements the observable-pattern.
+ * Implements the custom version of the observable-pattern.
  */
 public class C4Observable {
 
   private final Vector<C4Observer> c4Observers;
-  private boolean changed = false;
+  private boolean modified = false;
 
   /**
    * Constructs a new {@code Observable}.
@@ -36,25 +36,26 @@ public class C4Observable {
    */
   public void notifyObservers() {
 
-    Object[] arrLocal;
+    Object[] observers;
 
     synchronized (this) {
-      if (!changed) {
+      if (!modified) {
         return;
       }
-      arrLocal = c4Observers.toArray();
-      changed = false;
+      observers = c4Observers.toArray();
+      modified = false;
     }
 
-    for (int i = arrLocal.length - 1; i >= 0; i--) {
-      ((C4Observer) arrLocal[i]).update();
+    for (Object observer : observers) {
+      ((C4Observer) observer).update();
     }
   }
 
   /**
-   * After the state of an observable object is altered, it is marked changed.
+   * After the state of an observable object is altered, the {@code modified} is
+   * marked as changed.
    */
   protected synchronized void setChanged() {
-    changed = true;
+    modified = true;
   }
 }

@@ -23,7 +23,6 @@ public final class C4Frame extends JFrame {
     // Set the frame options.
     setTitle("Connect4");
     setLocationRelativeTo(null);
-    setLayout(new BorderLayout());
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
     setVisible(true);

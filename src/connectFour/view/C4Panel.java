@@ -32,26 +32,33 @@ import javax.swing.SwingConstants;
 public class C4Panel extends JPanel {
 
   /**
-   * The background-color of a slot.
+   * The background-color of a slot of the ConnectFour-game which was placed by
+   * the {@code Player.HUMAN}.
    */
   private static final Color HUMAN_COLOR = Color.YELLOW;
+
   /**
-   * The background-color of a slot.
+   * The background-color of a slot of the ConnectFour-game which was placed by
+   * the {@code Player.MACHINE}.
    */
   private static final Color MACHINE_COLOR = Color.RED;
+
   /**
-   * The background-color of a slot.
+   * The background-color of an empty slot.
    */
   private static final Color EMPTY_COLOR = Color.WHITE;
+
   /**
    * The background-color of a slot.
    */
   private static final Color HIGHLIGHTED_COLOR = Color.BLACK;
+
   /**
    * The height of a ColPanel. The height is by default just enough to fit the
    * standard font of a JLabel.
    */
   private static final int COLUMN_HEIGHT = 15;
+
   /**
    * The width of a RowPanel. The width is by default just enough to fit the
    * standard font of a JLabel.
@@ -69,45 +76,58 @@ public class C4Panel extends JPanel {
   private static final int BORDER_INVISIBLE = 0;
 
   /**
-   * The default color of a border.
+   * The default color of a border within the grid of the playing-field.
    */
   private static final Color BORDER_COLOR = Color.BLUE;
+
   /**
    * The background-color of a slot.
    */
   private static final Color SLOT_BACK_GROUND_COLOR = Color.BLUE;
-  /**
-   * The amount of size-difference between the diameter of the circle and the
-   * slotSize.
-   */
-  private static final int DIAMETER_REDUCTION = 10;
 
   /**
-   * The amount of which the size is divided to better fit the circle of a slot.
+   * The size-difference in percent between the diameter of the circle in a slot
+   * and the slotSize.
+   */
+  private static final double SLOT_DIAMETER_REDUCTION = 0.95;
+
+  /**
+   * The amount in percent which determines the size of the circle which marks a
+   * winning slot.
+   */
+  private static final double MARKER_DIAMETER_REDUCTION = 0.5;
+
+  /**
+   * The amount of which the size has to be divided to fit the circle of a slot.
    * By default, the size is halved and therefore {@code SIZE_DIVIDER} is set to
    * two.
    */
-  private static final int SIZE_DIVIDER = 2;
+  private static final int SLOT_SIZE_DIVIDER = 2;
+
   /**
    * Preferred size of the gameSlots. Used for height and width.
    */
   private static final int SLOT_SIZE = 50;
+
   /**
    * Preferred dimension of the gameSlots.
    */
   private static final Dimension SLOT_PANEL_SIZE = new Dimension(SLOT_SIZE,
       SLOT_SIZE);
+
   /**
    * Converter for transferring the information about the state of the {@code
-   * Board} since the controller and view have to be able to react to change
-   * within the board.
+   * Board} since the controlling elements and view-components have to be able
+   * to react to change within the board.
    */
   private final ObservedBoard observedBoard = new ObservedBoard(
       new ConnectFour());
+
   /**
    * Used to present information about the current gameState.
    */
-  private final JLabel statusLabel = new JLabel("It's your turn!");
+  private final JLabel statusLabel;
+
   /**
    * Used for enabling the possibility of the UnDo-Button by saving old
    * gameBoard-states on this stack.
@@ -116,7 +136,7 @@ public class C4Panel extends JPanel {
 
   /**
    * Necessary to keep track which players turn it is. By default, currentPlayer
-   * is set to {@code connectFour.model.Player.HUMAN}, since the human is the
+   * is set to {@code Player.HUMAN}, since the human is the
    * default-firstPlayer.
    */
   private Player currentPlayer = Player.HUMAN;
@@ -142,6 +162,7 @@ public class C4Panel extends JPanel {
 
     // Adding the topPanel which contains the JLabel to inform the user about
     // the current state of the game.
+    this.statusLabel = new JLabel("It's your turn!");
     JPanel topPanel = new JPanel();
     topPanel.add(statusLabel);
     add(topPanel, BorderLayout.NORTH);
@@ -157,7 +178,8 @@ public class C4Panel extends JPanel {
 
   /**
    * Sets the new selected level. If the machine is currently calculating the
-   * next move, the level
+   * next move, the level-change will be active after the move has be
+   * calculated.
    *
    * @param newLevel is the level which will be used after the current
    *                 machineMove.
@@ -165,7 +187,7 @@ public class C4Panel extends JPanel {
   private void handleLevel(int newLevel) {
     level = newLevel;
 
-    // Update the level in the boardObserver.
+    // Update the level in the observedBoard.
     Board newConnectFour = observedBoard.getBoard();
     newConnectFour.setLevel(newLevel);
     observedBoard.setBoard(newConnectFour.clone());
@@ -175,8 +197,7 @@ public class C4Panel extends JPanel {
   }
 
   /**
-   * Stars a new game with the firstPlayer given as a parameter. This method is
-   * executed after the "New"-button was clicked.
+   * Stars a new game with the firstPlayer given as a parameter.
    *
    * @param firstPlayer of the new game. If firstPlayer is {@code null} use the
    *                    firstPlayer of the last game instead. Used to simplify
@@ -201,7 +222,7 @@ public class C4Panel extends JPanel {
     observedBoard.getBoard().setLevel(level);
 
     // If the machine has the first move, this move is executed now to
-    // simplify the handleMove()-method immensely.
+    // simplify the handleMove()-method immensely by ensuring a turn-order.
     if (firstPlayer == Player.MACHINE) {
       moveThread = new MoveThread();
       moveThread.start();
@@ -213,7 +234,7 @@ public class C4Panel extends JPanel {
   }
 
   /**
-   * Starts a new game while the firstPlayer is switched.
+   * Starts a new game with a switched firstPlayer.
    */
   private void handleSwitch() {
     Player newFirstPlayer = observedBoard.getBoard().getFirstPlayer()
@@ -256,8 +277,8 @@ public class C4Panel extends JPanel {
   }
 
   /**
-   * Executes the move of a player and after the humanMove is executed, it
-   * executes the machineMove.
+   * Executes the move of a player and after the humanMove was executed,
+   * calculate the machineMove.
    *
    * @param column which was selected by the player.
    */
@@ -265,7 +286,7 @@ public class C4Panel extends JPanel {
 
     // Only allow a move to be made, if the game is still running.
     if (observedBoard.getBoard().isGameOver()) {
-      statusLabel.setText("The game is over." + getWinnerText());
+      statusLabel.setText("The game is over. " + getWinnerText());
 
       // Warn the player, if the machine is still calculating.
     } else if (moveThread != null && moveThread.isAlive()) {
@@ -275,7 +296,7 @@ public class C4Panel extends JPanel {
     } else {
       boolean humanMoveExecuted = humanMove(column);
 
-      // Only if the human successfully move, execute the machineMove.
+      // Only if the human successfully moved, execute the machineMove.
       if (humanMoveExecuted) {
         moveThread = new MoveThread();
         moveThread.start();
@@ -285,7 +306,6 @@ public class C4Panel extends JPanel {
       }
     }
   }
-
 
   /**
    * Executes the move of the player.
@@ -306,21 +326,22 @@ public class C4Panel extends JPanel {
       // version of the current game onto the stack.
       gameStack.push(observedBoard.getBoard().clone());
 
-      Board connectFour;
+      // Execute the move, if possible.
+      Board newBoard;
       try {
-        connectFour = observedBoard.getBoard().move(column);
+        newBoard = observedBoard.getBoard().move(column);
       } catch (IllegalMoveException e) {
         statusLabel.setText("A illegal move was executed.");
         return false;
       }
 
-      // If the selected column was full connectFour is now null.
+      // If the selected column was full newBoard is now null.
       // Check if the selected column was full.
-      if (connectFour == null) {
+      if (newBoard == null) {
         statusLabel.setText("The selected column is full! ");
         return false;
       } else {
-        observedBoard.setBoard(connectFour);
+        observedBoard.setBoard(newBoard);
         currentPlayer = Player.MACHINE;
         return true;
       }
@@ -333,9 +354,10 @@ public class C4Panel extends JPanel {
    * @return a message about the winning player or if there was a tie.
    */
   private String getWinnerText() {
+
+    // Only necessary if the game is over.
     if (observedBoard.getBoard().isGameOver()) {
       Player winner = observedBoard.getBoard().getWinner();
-
       if (winner == null) {
         return "The game was a tie.";
       } else {
@@ -360,7 +382,8 @@ public class C4Panel extends JPanel {
    * Models a panel which represents the number of a certain column. This panel
    * contains only JLabel in which the number of the column is stored for a
    * better user-experience. Since this class is only created to remove
-   * redundancy and doesn't implement new functionality it is static.
+   * redundancy and doesn't implement new functionality, IntelliJ recommends
+   * making the class static.
    */
   private static final class ColPanel extends JPanel {
 
@@ -380,12 +403,10 @@ public class C4Panel extends JPanel {
             BORDER_INVISIBLE, BORDER_INVISIBLE, BORDER_VISIBLE, BORDER_COLOR));
       }
 
+      // Setting panelSize and adding the label.
+      setPreferredSize(new Dimension(SLOT_SIZE, COLUMN_HEIGHT));
       JLabel number = new JLabel(col.toString());
       number.setHorizontalAlignment(SwingConstants.CENTER);
-
-      // Setting panelSize
-      setPreferredSize(new Dimension(SLOT_SIZE, COLUMN_HEIGHT));
-
       add(number, BorderLayout.NORTH);
     }
   }
@@ -394,7 +415,8 @@ public class C4Panel extends JPanel {
    * Models a panel which represents the number of a certain row. This panel
    * contains only JLabel in which the number of the row is stored for a better
    * user-experience. Since this class is only created to remove redundancy and
-   * doesn't implement new functionality it is static.
+   * doesn't implement new functionality, IntelliJ recommends * making the class
+   * static.
    */
   private static final class RowPanel extends JPanel {
 
@@ -419,9 +441,8 @@ public class C4Panel extends JPanel {
       JLabel number = new JLabel(row + " ");
       number.setHorizontalAlignment(SwingConstants.LEFT);
 
-      // Setting panelSize
+      // Setting panelSize and adding the label.
       setPreferredSize(new Dimension(ROW_WIDTH, SLOT_SIZE));
-
       add(number, BorderLayout.EAST);
     }
   }
@@ -488,14 +509,17 @@ public class C4Panel extends JPanel {
      * Row of the slotPanel in the gridBagLayout.
      */
     private final int row;
+
     /**
      * Column of the slotPanel in the gridBagLayout.
      */
     private final int column;
+
     /**
      * The player who put a stone into this panel.
      */
     private Player player;
+
     /**
      * True, if this slot is part of a witness. This means it is one of the
      * winning slots, which are highlighted after a game is won.
@@ -555,10 +579,11 @@ public class C4Panel extends JPanel {
       Graphics2D g = (Graphics2D) graphics;
 
       // Selecting the size of the circle.
-      Dimension dimension = getSize();
-      int diameter = dimension.height - DIAMETER_REDUCTION;
-      int x = getSize().width / SIZE_DIVIDER - diameter / SIZE_DIVIDER;
-      int y = getSize().height / SIZE_DIVIDER - diameter / SIZE_DIVIDER;
+      int slotDiameter = (int) (getHeight() * SLOT_DIAMETER_REDUCTION);
+      int x =
+          getHeight() / SLOT_SIZE_DIVIDER - slotDiameter / SLOT_SIZE_DIVIDER;
+      int y =
+          getHeight() / SLOT_SIZE_DIVIDER - slotDiameter / SLOT_SIZE_DIVIDER;
 
       // Selecting the color of the circle.
       if (player.equals(Player.HUMAN)) {
@@ -570,15 +595,18 @@ public class C4Panel extends JPanel {
         g.setColor(EMPTY_COLOR);
       }
 
-      g.fillOval(x, y, diameter, diameter);
+      g.fillOval(x, y, slotDiameter, slotDiameter);
 
       // Only if a slot is highlighted, mark it. Otherwise, ignore it.
+      // A slot is marked by drawing a smaller, black circle within the slot.
       if (highlighted) {
-        diameter = (dimension.height - 10) / 2;
-        x = getSize().width / 2 - diameter / 2;
-        y = getSize().height / 2 - diameter / 2;
+        int markerDiameter = (int) (getHeight() * MARKER_DIAMETER_REDUCTION);
+        x = getHeight() / SLOT_SIZE_DIVIDER
+            - markerDiameter / SLOT_SIZE_DIVIDER;
+        y = getHeight() / SLOT_SIZE_DIVIDER
+            - markerDiameter / SLOT_SIZE_DIVIDER;
         g.setColor(HIGHLIGHTED_COLOR);
-        g.fillOval(x, y, diameter, diameter);
+        g.fillOval(x, y, markerDiameter, markerDiameter);
       }
     }
 
@@ -636,8 +664,9 @@ public class C4Panel extends JPanel {
   }
 
   /**
-   * Models the gameBoard and all its components like the slots which represent
-   * a stone and the scale for row and column numbers.
+   * Models the gameBoard and all its components. Those are the slots which
+   * represent a stone and the scale for the row and column numbers for better
+   * readability for the user.
    */
   private final class CenterPanel extends JPanel {
 
@@ -647,9 +676,10 @@ public class C4Panel extends JPanel {
     private CenterPanel() {
 
       // Set the general layout.
-      GridBagLayout gridBagLayout = new GridBagLayout();
-      setLayout(gridBagLayout);
+      setLayout(new GridBagLayout());
       GridBagConstraints constraints = new GridBagConstraints();
+      constraints.weightx = 1;
+      constraints.weighty = 1;
 
       // Fill the grid.
       for (int i = 0; i <= Board.ROWS; i++) {
@@ -667,16 +697,25 @@ public class C4Panel extends JPanel {
             // The number of the row has to be converted since the rowPanel
             // is placed at the bottom and not the top.
           } else if (j == 0) {
+            constraints.weightx = 0;
+            constraints.weighty = 0;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
             add(new RowPanel(Board.ROWS - i), constraints);
 
             //ColPanels are put on the west-side containing number-indications.
           } else if (i == Board.ROWS) {
+            constraints.weightx = 0;
+            constraints.weighty = 0;
+            constraints.fill = GridBagConstraints.VERTICAL;
             add(new ColPanel(j), constraints);
 
             //All other panels are SlotPanels. The column has to be
             // converted, since there is the column with number-indications
             // on the left side.
           } else {
+            constraints.weightx = 1;
+            constraints.weighty = 1;
+            constraints.fill = GridBagConstraints.BOTH;
             add(new SlotPanel(i, j - 1, Player.EMPTY), constraints);
           }
         }
@@ -695,7 +734,7 @@ public class C4Panel extends JPanel {
     private ButtonPanel() {
       setLayout(new FlowLayout());
 
-      // Add levelButton.
+      // Add the levelButton.
       JComboBox<Integer> levelButton = new JComboBox<>();
       for (int i = 1; i <= ConnectFour.MAX_LEVEL; i++) {
         levelButton.addItem(i);
@@ -704,28 +743,27 @@ public class C4Panel extends JPanel {
       levelButton.addActionListener(event -> {
 
         // getSelectedItem() requires a check to avoid a NullPointerException.
-        // Without the assertion IntelliJ shows a warning.
         assert levelButton.getSelectedItem() != null;
         handleLevel((Integer) levelButton.getSelectedItem());
       });
       add(levelButton);
 
-      // Add newGameButton.
+      // Add the newGameButton.
       JButton newGameButton = new JButton("New");
       newGameButton.addActionListener(event -> handleNew(null));
       add(newGameButton);
 
-      // Add switchButton.
+      // Add the switchButton.
       JButton switchButton = new JButton("Switch");
       switchButton.addActionListener(event -> handleSwitch());
       add(switchButton);
 
-      // Add undoButton.
+      // Add the undoButton.
       JButton undoButton = new JButton("Undo");
       undoButton.addActionListener(event -> handleUndo());
       add(undoButton);
 
-      // Add quitButton.
+      // Add the quitButton.
       JButton quitButton = new JButton("Quit");
       quitButton.addActionListener(event -> handleQuit());
       add(quitButton);
