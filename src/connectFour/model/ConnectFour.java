@@ -230,7 +230,8 @@ public class ConnectFour implements Board {
   public Player getWinner() {
     Player winner = null;
 
-    //
+    // Has to be called to update the witnesses, since those are used to
+    // determine the winner.
     getWitness();
 
     if (isGameOver()) {

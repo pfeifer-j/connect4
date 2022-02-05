@@ -6,7 +6,7 @@ import javax.swing.SwingUtilities;
 /**
  * Entrypoint of the program, which starts the game.
  */
-public class Main {
+public final class Main {
 
   /**
    * Prevents the initialisation of the utility-class {@code Main}. Since its
@@ -27,5 +27,4 @@ public class Main {
     // Used for thread-safety.
     SwingUtilities.invokeLater(C4Frame::getFrame);
   }
-
 }
