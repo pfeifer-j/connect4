@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="797137ec-b716-4b7a-a0f8-a7f4bcea3ccd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/ObservedBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/ObservedBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/model/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/abalone/abalone/view/observerPattern/desktop.ini" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,6 +28,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="24FZBmPmby8T6X09NryhvzwYXOG" />
   <component name="ProjectLevelVcsManager">
@@ -129,6 +131,7 @@
       <workItem from="1644142744488" duration="134000" />
       <workItem from="1644143350323" duration="1057000" />
       <workItem from="1644266192975" duration="3517000" />
+      <workItem from="1644312815182" duration="6877000" />
     </task>
     <servers />
   </component>
@@ -145,7 +148,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/connect4_gui$Main.ic" NAME="Main Coverage Results" MODIFIED="1643368166254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

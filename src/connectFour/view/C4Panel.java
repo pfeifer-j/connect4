@@ -53,14 +53,14 @@ public class C4Panel extends JPanel {
   private static final Color HIGHLIGHTED_COLOR = Color.BLACK;
 
   /**
-   * The height of a ColPanel. The height is by default just enough to fit the
+   * The height of a SouthNumberPanel. The height is by default just enough to fit the
    * standard font of a JLabel.
    */
   private static final int COLUMN_HEIGHT = 15;
 
   /**
-   * The width of a RowPanel. The width is by default just enough to fit the
-   * standard font of a JLabel.
+   * The width of a WestNumberPanel. The width is by default just enough to fit
+   * the standard font of a JLabel.
    */
   private static final int ROW_WIDTH = 15;
 
@@ -380,11 +380,11 @@ public class C4Panel extends JPanel {
   /**
    * Models a panel which represents the number of a certain column. This panel
    * contains only JLabel in which the number of the column is stored for a
-   * better user-experience. Since this class is only created to remove
-   * redundancy and doesn't implement new functionality, IntelliJ recommends
-   * making the class static.
+   * better user-experience.
+   * Similar to WestNumberPanel but different enough for it to be a separate
+   * inner-class.
    */
-  private static final class ColPanel extends JPanel {
+  private static final class SouthNumberPanel extends JPanel {
 
     /**
      * Constructs a panel which will be placed on the bottom edge of the board.
@@ -392,7 +392,7 @@ public class C4Panel extends JPanel {
      * @param col is the column in which this panel is placed and which is
      *            stored inside the JLabel.
      */
-    private ColPanel(Integer col) {
+    private SouthNumberPanel(Integer col) {
       setLayout(new BorderLayout());
 
       // Setting only one visible border to make the column on the board look
@@ -403,9 +403,10 @@ public class C4Panel extends JPanel {
       }
 
       // Setting panelSize and adding the label.
-      setPreferredSize(new Dimension(SLOT_SIZE, COLUMN_HEIGHT));
+      setPreferredSize(new Dimension(ROW_WIDTH, COLUMN_HEIGHT));
       JLabel number = new JLabel(col.toString());
       number.setHorizontalAlignment(SwingConstants.CENTER);
+      number.setVerticalAlignment(SwingConstants.CENTER);
       add(number, BorderLayout.NORTH);
     }
   }
@@ -413,11 +414,11 @@ public class C4Panel extends JPanel {
   /**
    * Models a panel which represents the number of a certain row. This panel
    * contains only JLabel in which the number of the row is stored for a better
-   * user-experience. Since this class is only created to remove redundancy and
-   * doesn't implement new functionality, IntelliJ recommends * making the class
-   * static.
+   * user-experience.
+   * Similar to SoutNumberPanel but different enough for it to be a separate
+   * inner-class.
    */
-  private static final class RowPanel extends JPanel {
+  private static final class WestNumberPanel extends JPanel {
 
     /**
      * Constructs a panel which will be placed on the left edge of the board.
@@ -425,7 +426,7 @@ public class C4Panel extends JPanel {
      * @param row which this panel is placed in and the number which is stored
      *            inside the JLabel.
      */
-    private RowPanel(Integer row) {
+    private WestNumberPanel(Integer row) {
       setLayout(new BorderLayout());
 
       // Setting only one visible border to make the column on the board look
@@ -436,12 +437,11 @@ public class C4Panel extends JPanel {
             BORDER_COLOR));
       }
 
-      // Adding one space character for slightly adjusting the positioning.
-      JLabel number = new JLabel(row + " ");
-      number.setHorizontalAlignment(SwingConstants.LEFT);
-
       // Setting panelSize and adding the label.
-      setPreferredSize(new Dimension(ROW_WIDTH, SLOT_SIZE));
+      setPreferredSize(new Dimension(ROW_WIDTH, COLUMN_HEIGHT));
+            JLabel number = new JLabel(row + " ");
+      number.setHorizontalAlignment(SwingConstants.CENTER);
+      number.setVerticalAlignment(SwingConstants.CENTER);
       add(number, BorderLayout.EAST);
     }
   }
@@ -497,12 +497,78 @@ public class C4Panel extends JPanel {
   }
 
   /**
+   * Models the gameBoard and all its components. Those are the slots which
+   * represent a stone and the scale for the row and column numbers for better
+   * readability for the user.
+   */
+  private final class CenterPanel extends JPanel {
+
+    /**
+     * Construct a new {@code CenterPanel}.
+     */
+    private CenterPanel() {
+
+      // Set the general layout.
+      setLayout(new GridBagLayout());
+      GridBagConstraints constraints = new GridBagConstraints();
+      constraints.weightx = 1;
+      constraints.weighty = 1;
+
+      // Fill the grid.
+      for (int i = 0; i <= Board.ROWS; i++) {
+        for (int j = 0; j <= Board.COLS; j++) {
+          constraints.gridx = j;
+          constraints.gridy = i;
+
+          // The emptyPanel is only placed on the south-west slot, which
+          // doesn't contain any information.
+          if (i == Board.ROWS && j == 0) {
+            constraints.weightx = 0;
+            constraints.weighty = 0;
+            constraints.anchor = GridBagConstraints.CENTER;
+            constraints.fill = GridBagConstraints.BOTH;
+            add(new JPanel(), constraints); // Adding an empty panel.
+
+            //WestNumberPanel are put on the south-side containing number-
+            // indications. The number of the row has to be converted since
+            // the WestNumberPanel is placed at the bottom and not the top.
+          } else if (j == 0) {
+            constraints.weightx = 0;
+            constraints.weighty = 0;
+            constraints.anchor = GridBagConstraints.EAST;
+            constraints.fill = GridBagConstraints.VERTICAL;
+            add(new WestNumberPanel(Board.ROWS - i), constraints);
+
+            //SouthNumberPanel are put on the west-side containing
+            // number-indications.
+          } else if (i == Board.ROWS) {
+            constraints.weightx = 0;
+            constraints.weighty = 0;
+            constraints.anchor = GridBagConstraints.NORTH;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            add(new SouthNumberPanel(j), constraints);
+
+            //All other panels are SlotPanels. The column has to be
+            // converted, since there is the column with number-indications
+            // on the left side.
+          } else {
+            constraints.weightx = 1;
+            constraints.weighty = 1;
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.anchor = GridBagConstraints.CENTER;
+            add(new SlotPanel(i,j - 1, Player.EMPTY), constraints);
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * Represents the slots of a connectFour-game. The player and the machine can
    * move their stones into slotPanels. A slot observes the board and responds
    * on change.
    */
-  private final class SlotPanel extends JPanel implements
-      C4Observer {
+  private final class SlotPanel extends JPanel implements C4Observer {
 
     /**
      * Row of the slotPanel in the gridBagLayout.
@@ -544,8 +610,14 @@ public class C4Panel extends JPanel {
       // Setting the panelProperties.
       setPreferredSize(SLOT_PANEL_SIZE);
       setBackground(SLOT_BACK_GROUND_COLOR);
+      setAlignmentX(CENTER_ALIGNMENT);
+      setAlignmentY(CENTER_ALIGNMENT);
       addMouseListener(
           new MouseListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
 
@@ -554,20 +626,40 @@ public class C4Panel extends JPanel {
               update();
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void mousePressed(MouseEvent e) {
+
+              // Not in use.
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void mouseReleased(MouseEvent e) {
+
+              // Not in use.
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void mouseEntered(MouseEvent e) {
+
+              // Not in use.
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void mouseExited(MouseEvent e) {
+
+              // Not in use.
             }
           });
     }
@@ -577,10 +669,13 @@ public class C4Panel extends JPanel {
       super.paintComponent(graphics);
       Graphics2D g = (Graphics2D) graphics;
 
+      //Clear the background of parent-panel.
+      super.paintComponent(g);
+
       // Selecting the size of the circle.
       int slotDiameter = (int) (getHeight() * SLOT_DIAMETER_REDUCTION);
       int x =
-          getHeight() / SLOT_SIZE_DIVIDER - slotDiameter / SLOT_SIZE_DIVIDER;
+          getWidth() / SLOT_SIZE_DIVIDER - slotDiameter / SLOT_SIZE_DIVIDER;
       int y =
           getHeight() / SLOT_SIZE_DIVIDER - slotDiameter / SLOT_SIZE_DIVIDER;
 
@@ -659,66 +754,6 @@ public class C4Panel extends JPanel {
       }
 
       repaint();
-    }
-  }
-
-  /**
-   * Models the gameBoard and all its components. Those are the slots which
-   * represent a stone and the scale for the row and column numbers for better
-   * readability for the user.
-   */
-  private final class CenterPanel extends JPanel {
-
-    /**
-     * Construct a new {@code CenterPanel}.
-     */
-    private CenterPanel() {
-
-      // Set the general layout.
-      setLayout(new GridBagLayout());
-      GridBagConstraints constraints = new GridBagConstraints();
-      constraints.weightx = 1;
-      constraints.weighty = 1;
-
-      // Fill the grid.
-      for (int i = 0; i <= Board.ROWS; i++) {
-        for (int j = 0; j <= Board.COLS; j++) {
-          constraints.gridx = j;
-          constraints.gridy = i;
-
-          // The emptyPanel is only placed on the south-west slot, which
-          // doesn't contain any information.
-          if (i == Board.ROWS && j == 0) {
-            JPanel emptyPanel = new JPanel();
-            add(emptyPanel, constraints);
-
-            //RowPanels are put on the south-side containing number-indications.
-            // The number of the row has to be converted since the rowPanel
-            // is placed at the bottom and not the top.
-          } else if (j == 0) {
-            constraints.weightx = 0;
-            constraints.weighty = 0;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(new RowPanel(Board.ROWS - i), constraints);
-
-            //ColPanels are put on the west-side containing number-indications.
-          } else if (i == Board.ROWS) {
-            constraints.weightx = 0;
-            constraints.weighty = 0;
-            constraints.fill = GridBagConstraints.VERTICAL;
-            add(new ColPanel(j), constraints);
-
-            //All other panels are SlotPanels. The column has to be
-            // converted, since there is the column with number-indications
-            // on the left side.
-          } else {
-            constraints.weightx = 1;
-            constraints.weighty = 1;
-            constraints.fill = GridBagConstraints.BOTH;
-            add(new SlotPanel(i, j - 1, Player.EMPTY), constraints);
-          }
-        }
-      }
     }
   }
 
