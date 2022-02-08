@@ -1,4 +1,4 @@
-package connectFour.model;
+package connect4.model;
 
 /**
  * Custom exception used to indicate the use of an illegal move during the game
@@ -9,13 +9,13 @@ package connectFour.model;
  */
 public class IllegalMoveException extends RuntimeException {
 
-  /**
-   * Constructs a new exception using the super-constructor of {@code
-   * RuntimeException} using a message.
-   *
-   * @param msg The message used to describe the occurred problem.
-   */
-  public IllegalMoveException(String msg) {
-    super(msg);
-  }
+    /**
+     * Constructs a new exception using the super-constructor of {@code
+     * RuntimeException} using a message.
+     *
+     * @param msg The message used to describe the occurred problem.
+     */
+    public IllegalMoveException(String msg) {
+        super(msg);
+    }
 }
