@@ -4,7 +4,6 @@ import connectFour.model.Board;
 import connectFour.model.ConnectFour;
 import connectFour.model.Coordinates2D;
 import connectFour.model.IllegalMoveException;
-import connectFour.model.ObservedBoard;
 import connectFour.model.Player;
 import connectFour.view.observerPattern.C4Observer;
 import java.awt.BorderLayout;

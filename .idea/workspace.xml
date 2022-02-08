@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="797137ec-b716-4b7a-a0f8-a7f4bcea3ccd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/ConnectFour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/model/ConnectFour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/model/ObservedBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/ObservedBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/model/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +124,11 @@
       <workItem from="1643993364667" duration="11034000" />
       <workItem from="1644047599809" duration="88000" />
       <workItem from="1644066932936" duration="2060000" />
-      <workItem from="1644069049228" duration="35000" />
+      <workItem from="1644069049228" duration="78000" />
+      <workItem from="1644136714107" duration="4158000" />
+      <workItem from="1644142744488" duration="134000" />
+      <workItem from="1644143350323" duration="1057000" />
+      <workItem from="1644266192975" duration="3517000" />
     </task>
     <servers />
   </component>

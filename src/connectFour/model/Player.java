@@ -1,7 +1,7 @@
 package connectFour.model;
 
 /**
- * Enum for representing the {@code connectFour.model.Player} and a players
+ * Enum for representing the {@code Player} and a players
  * {@code symbol} in the {@code Board}.
  */
 public enum Player {

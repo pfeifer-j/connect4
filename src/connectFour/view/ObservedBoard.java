@@ -1,5 +1,6 @@
-package connectFour.model;
+package connectFour.view;
 
+import connectFour.model.Board;
 import connectFour.view.observerPattern.C4Observable;
 
 /**
