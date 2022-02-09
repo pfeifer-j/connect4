@@ -15,7 +15,7 @@ public class Connect4 implements Board {
      * The maximal level which can be selected for playing. The default is 8
      * since the calculation takes too much time in higher levels.
      */
-    public static final int MAX_LEVEL = 8;
+    public final static int MAX_LEVEL = 8;
 
     /**
      * The board which contains all slots of the game and their owners.

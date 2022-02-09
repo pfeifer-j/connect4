@@ -35,89 +35,89 @@ public class C4Panel extends JPanel {
      * Serial ID of this.
      */
     @Serial
-    private static final long serialVersionUID = 1L;
+    private final static long serialVersionUID = 1L;
 
     /**
-     * The background-color of a slot of the connect4-game which was placed
-     * by the {@code Player.HUMAN}.
+     * The background-color of a slot of the connect4-game which was placed by
+     * the {@code Player.HUMAN}.
      */
-    private static final Color HUMAN_COLOR = Color.YELLOW;
+    private final static Color HUMAN_COLOR = Color.YELLOW;
 
     /**
-     * The background-color of a slot of the connect4-game which was placed
-     * by the {@code Player.MACHINE}.
+     * The background-color of a slot of the connect4-game which was placed by
+     * the {@code Player.MACHINE}.
      */
-    private static final Color MACHINE_COLOR = Color.RED;
+    private final static Color MACHINE_COLOR = Color.RED;
 
     /**
      * The background-color of an empty slot.
      */
-    private static final Color EMPTY_COLOR = Color.WHITE;
+    private final static Color EMPTY_COLOR = Color.WHITE;
 
     /**
      * The background-color of a slot.
      */
-    private static final Color HIGHLIGHTED_COLOR = Color.BLACK;
+    private final static Color HIGHLIGHTED_COLOR = Color.BLACK;
 
     /**
      * The height of a BottomRulerPanel. The height is by default just enough to
      * fit the standard font of a JLabel.
      */
-    private static final int COLUMN_HEIGHT = 15;
+    private final static int COLUMN_HEIGHT = 15;
 
     /**
-     * The width of a LeftRulerPanel. The width is by default just enough to
-     * fit the standard font of a JLabel.
+     * The width of a LeftRulerPanel. The width is by default just enough to fit
+     * the standard font of a JLabel.
      */
-    private static final int ROW_WIDTH = 15;
+    private final static int ROW_WIDTH = 15;
 
     /**
      * The size of the right/east border.
      */
-    private static final int BORDER_VISIBLE = 3;
+    private final static int BORDER_VISIBLE = 3;
 
     /**
      * The size of all borders except the right/east one.
      */
-    private static final int BORDER_INVISIBLE = 0;
+    private final static int BORDER_INVISIBLE = 0;
 
     /**
      * The default color of a border within the grid of the playing-field.
      */
-    private static final Color BORDER_COLOR = Color.BLUE;
+    private final static Color BORDER_COLOR = Color.BLUE;
 
     /**
      * The background-color of a slot.
      */
-    private static final Color SLOT_BACK_GROUND_COLOR = Color.BLUE;
+    private final static Color SLOT_BACK_GROUND_COLOR = Color.BLUE;
 
     /**
      * The size-difference in percent between the diameter of the circle in a
      * slot and the slotSize.
      */
-    private static final double SLOT_DIAMETER_REDUCTION = 0.95;
+    private final static double SLOT_DIAMETER_REDUCTION = 0.95;
 
     /**
      * Used to determine the size of the circle which marks a winning slot.
      */
-    private static final double MARKER_DIAMETER_REDUCTION = 0.5;
+    private final static double MARKER_DIAMETER_REDUCTION = 0.5;
 
     /**
      * The amount of which the size has to be divided to fit the circle of a
      * slot. By default, the size is halved and therefore {@code SIZE_DIVIDER}
      * is set to two.
      */
-    private static final int SLOT_SIZE_DIVIDER = 2;
+    private final static int SLOT_SIZE_DIVIDER = 2;
 
     /**
      * Preferred size of the gameSlots. Used for height and width.
      */
-    private static final int SLOT_SIZE = 50;
+    private final static int SLOT_SIZE = 50;
 
     /**
      * Preferred dimension of the gameSlots.
      */
-    private static final Dimension SLOT_PANEL_SIZE = new Dimension(SLOT_SIZE,
+    private final static Dimension SLOT_PANEL_SIZE = new Dimension(SLOT_SIZE,
         SLOT_SIZE);
 
     /**
@@ -195,19 +195,19 @@ public class C4Panel extends JPanel {
     /**
      * Delegates information between the SlotPanel and the game.
      */
-    private class C4Listener implements MouseListener{
+    private final class C4Listener implements MouseListener {
 
         /**
          * Enables the usage of multiple threads while calculation the next
-         * machineMove which gives the player the possibility to interact
-         * with the GUI while a move is being calculated.
+         * machineMove which gives the player the possibility to interact with
+         * the GUI while a move is being calculated.
          */
         private MoveThread moveThread;
 
         /**
          * Constructs a new MouseListener.
          */
-        public C4Listener() {
+        private C4Listener() {
             this.moveThread = new MoveThread();
         }
 
@@ -258,9 +258,9 @@ public class C4Panel extends JPanel {
         }
 
         /**
-         * Sets the new selected level. If the machine is currently
-         * calculating the next move, the level-change will be active after
-         * the move has be calculated.
+         * Sets the new selected level. If the machine is currently calculating
+         * the next move, the level-change will be active after the move has be
+         * calculated.
          *
          * @param newLevel is the level which will be used after the current
          *                 machineMove.
@@ -279,12 +279,11 @@ public class C4Panel extends JPanel {
          * Stars a new game with the firstPlayer given as a parameter.
          *
          * @param firstPlayer of the new game. If firstPlayer is {@code null}
-         *                    use the firstPlayer of the last game instead.
-         *                    Used to simplify the handleSwitch()-method.
+         *                    use the firstPlayer of the last game instead. Used
+         *                    to simplify the handleSwitch()-method.
          */
         private void handleNew(Player firstPlayer) {
-            moveThread.interruptMachineMove(); // Necessary for a responsive
-            // user-experience.
+            moveThread.interruptMachineMove();
 
             // If a new game has been started the gameStack is cleared.
             // Thus, the player can't go back to an old came by using UnDo's
@@ -404,7 +403,6 @@ public class C4Panel extends JPanel {
                     statusLabel.setText("A illegal move was executed.");
                     return false;
                 }
-
                 if (newBoard == null) {
                     statusLabel.setText("The selected column is full! ");
                     return false;
@@ -447,7 +445,6 @@ public class C4Panel extends JPanel {
                         // if-statement, to set the updated level is less
                         // efficient than just resetting the level everytime.
                         clonedBoard.setLevel(level);
-
                         boardWrapper.setBoard(clonedBoard.clone());
                         currentPlayer = Player.HUMAN;
 
@@ -491,7 +488,7 @@ public class C4Panel extends JPanel {
          * Serial ID of this.
          */
         @Serial
-        private static final long serialVersionUID = 1L;
+        private final static long serialVersionUID = 1L;
 
         /**
          * Construct a new {@code CenterPanel}.
@@ -555,9 +552,9 @@ public class C4Panel extends JPanel {
     /**
      * Models a panel which represents the number of a certain column. This
      * panel contains only JLabel in which the number of the column is stored
-     * for a better user-experience.
-     * Similar to LeftRulerPanel but different enough for it to be a separate
-     * inner-class. The redundancy is accepted here.
+     * for a better user-experience. Similar to LeftRulerPanel but different
+     * enough for it to be a separate inner-class. The redundancy is accepted
+     * here.
      */
     private final class BottomRulerPanel extends JPanel {
 
@@ -565,7 +562,7 @@ public class C4Panel extends JPanel {
          * Serial ID of this.
          */
         @Serial
-        private static final long serialVersionUID = 1L;
+        private final static long serialVersionUID = 1L;
 
         /**
          * Constructs a panel which will be placed on the bottom edge of the
@@ -584,7 +581,6 @@ public class C4Panel extends JPanel {
                     BORDER_INVISIBLE, BORDER_INVISIBLE, BORDER_VISIBLE,
                     BORDER_COLOR));
             }
-
             setPreferredSize(new Dimension(ROW_WIDTH, COLUMN_HEIGHT));
             JLabel number = new JLabel(column.toString());
             number.setHorizontalAlignment(SwingConstants.CENTER);
@@ -596,9 +592,8 @@ public class C4Panel extends JPanel {
     /**
      * Models a panel which represents the number of a certain row. This panel
      * contains only JLabel in which the number of the row is stored for a
-     * better user-experience.
-     * Similar to BottomRulerPanel but different enough for it to be a separate
-     * inner-class. The redundancy is accepted here.
+     * better user-experience. Similar to BottomRulerPanel but different enough
+     * for it to be a separate inner-class. The redundancy is accepted here.
      */
     private final class LeftRulerPanel extends JPanel {
 
@@ -606,7 +601,7 @@ public class C4Panel extends JPanel {
          * Serial ID of this.
          */
         @Serial
-        private static final long serialVersionUID = 1L;
+        private final static long serialVersionUID = 1L;
 
         /**
          * Constructs a panel which will be placed on the left edge of the
@@ -646,7 +641,7 @@ public class C4Panel extends JPanel {
          * Serial ID of this.
          */
         @Serial
-        private static final long serialVersionUID = 1L;
+        private final static long serialVersionUID = 1L;
 
         /**
          * Row of the slotPanel in the gridBagLayout.
@@ -774,8 +769,7 @@ public class C4Panel extends JPanel {
 
             // Only if the game is won by a player, mark all winning slots.
             // Otherwise, do nothing.
-            if (boardWrapper.isGameOver()
-                && boardWrapper.getWinner() != null) {
+            if (boardWrapper.isGameOver() && boardWrapper.getWinner() != null) {
                 updateMarkedSlot();
 
                 // Inform user about the winner.
@@ -794,7 +788,7 @@ public class C4Panel extends JPanel {
          * Serial ID of this.
          */
         @Serial
-        private static final long serialVersionUID = 1L;
+        private final static long serialVersionUID = 1L;
 
         /**
          * Construct a new {@code ButtonPanel}.

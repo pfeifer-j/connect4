@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="797137ec-b716-4b7a-a0f8-a7f4bcea3ccd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/connect4_gui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/connect4_gui.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connect4/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connect4/model/IllegalMoveException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/model/IllegalMoveException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connect4/view/C4Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/C4Frame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/view/BoardWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/BoardWrapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connect4/view/ObservedBoard.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +177,7 @@
       <workItem from="1644340513778" duration="408000" />
       <workItem from="1644340979661" duration="1197000" />
       <workItem from="1644411719179" duration="9458000" />
-      <workItem from="1644423355011" duration="6521000" />
+      <workItem from="1644423355011" duration="7477000" />
     </task>
     <servers />
   </component>

@@ -15,12 +15,12 @@ public final class C4Frame extends JFrame {
      * Serial ID of this.
      */
     @Serial
-    private static final long serialVersionUID = 1L;
+    private final static long serialVersionUID = 1L;
 
     /**
      * The only instance of the {@code C4Frame}.
      */
-    private static final C4Frame C4_FRAME = new C4Frame();
+    private final static C4Frame C4_FRAME = new C4Frame();
 
     /**
      * The constructor is private to limit the usage.

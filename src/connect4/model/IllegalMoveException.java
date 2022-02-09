@@ -15,7 +15,7 @@ public class IllegalMoveException extends RuntimeException {
      * Serial ID of this.
      */
     @Serial
-    private static final long serialVersionUID = 1L;
+    private final static long serialVersionUID = 1L;
 
     /**
      * Constructs an IllegalMoveException with no detail message.

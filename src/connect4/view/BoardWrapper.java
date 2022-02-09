@@ -30,6 +30,8 @@ public class BoardWrapper extends C4Observable {
     /**
      * Creates a new board using a given firstPlayer and ensures that the
      * boardWrapper in the C4Panel can be {@code final}.
+     *
+     * @param firstPlayer who starts the next game.
      */
     public void newBoard(Player firstPlayer) {
         this.board = new Connect4(firstPlayer);
@@ -52,6 +54,8 @@ public class BoardWrapper extends C4Observable {
     /**
      * Executes the getFirstPlayer()-method on the wrapped board. More
      * information can be found in the {@code Board}-interface.
+     *
+     * @return the player who started the current game.
      */
     public Player getFirstPlayer() {
         return board.getFirstPlayer();
@@ -60,6 +64,9 @@ public class BoardWrapper extends C4Observable {
     /**
      * Executes the move()-method on the wrapped board. More information can be
      * found in the {@code Board}-interface.
+     *
+     * @param col Column into witch the next stone is thrown.
+     * @return a cloned board on which the move was executed.
      */
     public Board move(int col) {
         setChanged();
@@ -70,6 +77,8 @@ public class BoardWrapper extends C4Observable {
     /**
      * Executes the setLevel()-method on the wrapped board. More information can
      * be found in the {@code Board}-interface.
+     *
+     * @param level to be set.
      */
     public void setLevel(int level) {
         board.setLevel(level);
@@ -111,12 +120,13 @@ public class BoardWrapper extends C4Observable {
      * Executes the getSlot()-method on the wrapped board. More information can
      * be found in the {@code Board}-interface.
      *
+     * @param row of the requested slot.
+     * @param col of the requested slot.
      * @return the requested slot.
      */
     public Player getSlot(int row, int col) {
         return board.getSlot(row, col);
     }
-
 
     /**
      * Executes the clone()-method on the wrapped board. More information can be
