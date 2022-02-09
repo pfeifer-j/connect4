@@ -3,7 +3,7 @@ package connect4.model;
 import java.util.Collection;
 
 /**
- * The Connect Four game originally published by Milton Bradley (MB) in 1974.
+ * The connect-four game originally published by Milton Bradley (MB) in 1974.
  * The game is also known as Four in a Row, Four in a Line, Lineup Four, Four
  * Wins, or Captain's Mistress.
  *
@@ -43,7 +43,7 @@ public interface Board extends Cloneable {
    *         i.e., {@code col} was full before, then {@code null} will be
    *         returned.
    * @throws IllegalMoveException The game is already over, or it is not the
-   *         the human's turn.
+   *         human's turn.
    * @throws IllegalArgumentException The provided column {@code col} is
    *         invalid, i.e., not found on the grid.
    */
@@ -56,7 +56,7 @@ public interface Board extends Cloneable {
    *
    * @return A new board with the move executed.
    * @throws IllegalMoveException The game is already over, or it is not the
-   *         the machine's turn.
+   *         machine's turn.
    * @throws InterruptedException {@link Thread#interrupt()} was called on the
    *         executing thread. Thus, the execution stops prematurely.
    */
@@ -100,7 +100,7 @@ public interface Board extends Cloneable {
 
   /**
    * Gets the content of the slot at the specified coordinates. Either it
-   * contains a tile of one of the two players already or it is empty.
+   * contains a tile of one of the two players already, or it is empty.
    *
    * @param row The row of the slot in the game grid.
    * @param col The column of the slot in the game grid.

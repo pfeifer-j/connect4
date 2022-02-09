@@ -4,7 +4,7 @@ import connect4.model.Board;
 import connect4.view.observerPattern.C4Observable;
 
 /**
- * Converts the board in {@code ConnectFour} to an observable object. This class
+ * Converts the board in {@code Connect4} to an observable object. This class
  * is used in the GUI to respond to change and therefore extends the custom
  * observable-pattern {@code C4Observable} used in this project.
  */

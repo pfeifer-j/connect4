@@ -27,14 +27,13 @@ public enum Player {
     }
 
     /**
-     * Getter for the symbol of a {@code connect4.model.Player}.
+     * Getter for the symbol of a {@code Player}.
      *
-     * @return The symbol of a {@code connect4.model.Player}.
+     * @return The symbol of a {@code Player}.
      */
     public String getSymbol() {
         return symbol;
     }
-
 
     /**
      * Returns the opposite player. If {@code this} is {@code Player.Empty}

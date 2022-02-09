@@ -2,30 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="797137ec-b716-4b7a-a0f8-a7f4bcea3ccd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/connect4/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/model/Board.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/model/ConnectFour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/model/Coordinates2D.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/model/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/view/C4Frame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/view/ObservedBoard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/connect4/view/observerPattern/C4Observable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/connectFour_gui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/connectFour_gui.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/connect4_gui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/connect4_gui.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/connect4/Tests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/Board.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/ConnectFour.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/Coordinates2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/IllegalMoveException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/model/IllegalMoveException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/model/Player.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Frame.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/view/ObservedBoard.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/view/observerPattern/C4Observable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/view/observerPattern/C4Observer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/observerPattern/C4Observer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/model/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/model/ConnectFour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/model/Connect4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/model/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/view/ObservedBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/ObservedBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/view/observerPattern/C4Observable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/observerPattern/C4Observable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,6 +99,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="connect4.Main" />
+      <module name="connect4_gui" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="connect4.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <module name="Connect4" />
       <extension name="coverage">
@@ -136,19 +133,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="connect4_gui" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="connect4_gui" />
-      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -192,6 +176,8 @@
       <workItem from="1644143350323" duration="1057000" />
       <workItem from="1644266192975" duration="3517000" />
       <workItem from="1644312815182" duration="6877000" />
+      <workItem from="1644340513778" duration="408000" />
+      <workItem from="1644340979661" duration="1197000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,7 @@
 package connect4.view;
 
 import connect4.model.Board;
-import connect4.model.ConnectFour;
+import connect4.model.Connect4;
 import connect4.model.Coordinates2D;
 import connect4.model.IllegalMoveException;
 import connect4.model.Player;
@@ -31,13 +31,13 @@ import javax.swing.SwingConstants;
 public class C4Panel extends JPanel {
 
     /**
-     * The background-color of a slot of the ConnectFour-game which was placed
+     * The background-color of a slot of the connect4-game which was placed
      * by the {@code Player.HUMAN}.
      */
     private static final Color HUMAN_COLOR = Color.YELLOW;
 
     /**
-     * The background-color of a slot of the ConnectFour-game which was placed
+     * The background-color of a slot of the connect4-game which was placed
      * by the {@code Player.MACHINE}.
      */
     private static final Color MACHINE_COLOR = Color.RED;
@@ -119,7 +119,7 @@ public class C4Panel extends JPanel {
      * to react to change within the board.
      */
     private final ObservedBoard observedBoard = new ObservedBoard(
-        new ConnectFour());
+        new Connect4());
 
     /**
      * Used to present information about the current gameState.
@@ -185,9 +185,9 @@ public class C4Panel extends JPanel {
         level = newLevel;
 
         // Update the level in the observedBoard.
-        Board newConnectFour = observedBoard.getBoard();
-        newConnectFour.setLevel(newLevel);
-        observedBoard.setBoard(newConnectFour.clone());
+        Board newConnect4 = observedBoard.getBoard();
+        newConnect4.setLevel(newLevel);
+        observedBoard.setBoard(newConnect4.clone());
 
         // Inform the user about the successful level change.
         statusLabel.setText("The new level is " + level + ".");
@@ -212,7 +212,7 @@ public class C4Panel extends JPanel {
         if (firstPlayer == null) {
             firstPlayer = observedBoard.getBoard().getFirstPlayer();
         }
-        observedBoard.setBoard(new ConnectFour(firstPlayer));
+        observedBoard.setBoard(new Connect4(firstPlayer));
         currentPlayer = firstPlayer;
         observedBoard.getBoard().setLevel(level);
 
@@ -759,7 +759,7 @@ public class C4Panel extends JPanel {
 
             // Add the levelButton.
             JComboBox<Integer> levelButton = new JComboBox<>();
-            for (int i = 1; i <= ConnectFour.MAX_LEVEL; i++) {
+            for (int i = 1; i <= Connect4.MAX_LEVEL; i++) {
                 levelButton.addItem(i);
             }
             levelButton.setSelectedItem(Board.CONNECT);

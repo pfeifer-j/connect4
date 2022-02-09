@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Contains the logic for a regular game of ConnectFour.
+ * Contains the logic for a regular game of connect4.
  */
-public class ConnectFour implements Board {
+public class Connect4 implements Board {
 
     /**
      * The maximal level which can be selected for playing. The default is 8
@@ -57,23 +57,23 @@ public class ConnectFour implements Board {
     private Collection<Coordinates2D> witnessMachine;
 
     /**
-     * Constructs a new {@code ConnectFour}-instance using the default
+     * Constructs a new {@code Connect4}-instance using the default
      * settings.
      */
-    public ConnectFour() {
+    public Connect4() {
         this.firstPlayer = Player.HUMAN;
-        constructConnectFour();
+        constructConnect4();
     }
 
     /**
-     * Constructs a new {@code ConnectFour}-instance with a given {@code
+     * Constructs a new {@code Connect4}-instance with a given {@code
      * firstPlayer}.
      *
      * @param firstPlayer The new {@code firstPlayer} to start the game.
      */
-    public ConnectFour(Player firstPlayer) {
+    public Connect4(Player firstPlayer) {
         this.firstPlayer = firstPlayer;
-        constructConnectFour();
+        constructConnect4();
     }
 
     /**
@@ -94,7 +94,7 @@ public class ConnectFour implements Board {
      * Constructs a game of connect4. This method is only called by the
      * constructors and used to reduce redundancy.
      */
-    private void constructConnectFour() {
+    private void constructConnect4() {
         this.level = CONNECT;
         this.lastPlayer = Player.EMPTY;
         this.board = new Player[ROWS][COLS];
@@ -167,7 +167,7 @@ public class ConnectFour implements Board {
                     + "game is over or its the turn of the machine.");
         }
 
-        ConnectFour clonedBoard = this.clone();
+        Connect4 clonedBoard = this.clone();
         if (clonedBoard.isColFull(col)) {
             return null;
         } else {
@@ -193,7 +193,7 @@ public class ConnectFour implements Board {
         } else {
             int index = getBestIndex();
             assert !isColFull(index);
-            ConnectFour clonedBoard = this.clone();
+            Connect4 clonedBoard = this.clone();
             clonedBoard.dropStone(index, Player.MACHINE);
             lastPlayer = Player.MACHINE;
             return clonedBoard;
@@ -270,8 +270,8 @@ public class ConnectFour implements Board {
      * {@inheritDoc}
      */
     @Override
-    public ConnectFour clone() {
-        ConnectFour clonedConnect = new ConnectFour();
+    public Connect4 clone() {
+        Connect4 clonedConnect = new Connect4();
         Player[][] clonedBoard = new Player[ROWS][COLS];
         for (int i = 0; i < ROWS; i++) {
             clonedBoard[i] = board[i].clone();
@@ -635,7 +635,7 @@ public class ConnectFour implements Board {
      */
     private int getBestIndex() throws InterruptedException {
         int currentLevel = level;
-        ConnectFour tree = clone();
+        Connect4 tree = clone();
         return tree.getHighestEval(currentLevel)[1];
     }
 
@@ -659,7 +659,7 @@ public class ConnectFour implements Board {
         result[0] = Integer.MIN_VALUE;
         for (int i = 0; i < COLS; i++) {
             if (!isColFull(i)) {
-                ConnectFour child = clone();
+                Connect4 child = clone();
                 child.dropStone(i, Player.MACHINE);
                 int maxScore = child.evaluate(height);
                 if (height > 1) {
@@ -694,7 +694,7 @@ public class ConnectFour implements Board {
         result[0] = Integer.MAX_VALUE;
         for (int i = 0; i < COLS; i++) {
             if (!isColFull(i)) {
-                ConnectFour child = clone();
+                Connect4 child = clone();
                 child.dropStone(i, Player.HUMAN);
                 int minScore = child.evaluate(height);
                 if (height > 1) {

@@ -1,6 +1,5 @@
 package connect4.view.observerPattern;
 
-import connect4.model.IllegalMoveException;
 import java.util.Vector;
 
 /**
