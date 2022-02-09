@@ -2,6 +2,7 @@ package connect4.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.Serial;
 import javax.swing.JFrame;
 
 /**
@@ -9,6 +10,12 @@ import javax.swing.JFrame;
  * to ensure that only one game can run at a time.
  */
 public final class C4Frame extends JFrame {
+
+    /**
+     * Serial ID of this.
+     */
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * The only instance of the {@code C4Frame}.

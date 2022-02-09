@@ -25,7 +25,7 @@ public final class Main {
      */
     public static void main(String[] args) {
 
-        // Used for thread-safety.
+        // Used for thread-safety. The return-value can be ignored.
         SwingUtilities.invokeLater(C4Frame::getFrame);
     }
 }

@@ -1,5 +1,7 @@
 package connect4.model;
 
+import java.io.Serial;
+
 /**
  * Custom exception used to indicate the use of an illegal move during the game
  * of {@code Connect4}. Occurs e.g. if a move is executed on a full column. The
@@ -8,6 +10,19 @@ package connect4.model;
  * Machine.
  */
 public class IllegalMoveException extends RuntimeException {
+
+    /**
+     * Serial ID of this.
+     */
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Constructs an IllegalMoveException with no detail message.
+     */
+    public IllegalMoveException() {
+        super();
+    }
 
     /**
      * Constructs a new exception using the super-constructor of {@code
