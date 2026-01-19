@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="797137ec-b716-4b7a-a0f8-a7f4bcea3ccd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/abalone/abalone/view/observerPattern/desktop.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectFour/view/C4Panel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/view/BoardWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/BoardWrapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect4/view/C4Panel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +29,31 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1644323006" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1644323005" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -47,11 +72,15 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Jan\Documents\Programmierung\ProgII\connect4_gui\connect4\src\connect4\view" />
       <recent name="C:\Users\Jan\Documents\Programmierung\ProgII\connect4_gui\connect4\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Jan\Documents\Programmierung\ProgII\connectFour_gui\src\connect4\view\observerPattern" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main (2)">
@@ -69,11 +98,11 @@
       </method>
     </configuration>
     <configuration name="Main (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="connectFour.Main" />
-      <module name="connectFour_gui" />
+      <option name="MAIN_CLASS_NAME" value="connect4.Main" />
+      <module name="connect4_gui" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="connectFour.*" />
+          <option name="PATTERN" value="connect4.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -85,7 +114,20 @@
       <module name="Connect4" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="connectFour.*" />
+          <option name="PATTERN" value="connect4.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="connect4.Main" />
+      <module name="connect4_gui" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="connect4.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -132,6 +174,10 @@
       <workItem from="1644143350323" duration="1057000" />
       <workItem from="1644266192975" duration="3517000" />
       <workItem from="1644312815182" duration="6877000" />
+      <workItem from="1644340513778" duration="408000" />
+      <workItem from="1644340979661" duration="1197000" />
+      <workItem from="1644411719179" duration="9458000" />
+      <workItem from="1644423355011" duration="7477000" />
     </task>
     <servers />
   </component>
@@ -148,6 +194,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/connect4_gui$Main.ic" NAME="Main Coverage Results" MODIFIED="1643368166254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
